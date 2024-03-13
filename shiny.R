@@ -9,11 +9,12 @@ mkdir("shiny/data")
 mkdir("shiny/www")
 
 # copy in www data
-cp(taf.data.path("www/*"), "shiny/www")
+#cp(taf.data.path("www/*"), "shiny/www")
 # need to move css and js code out of here I think
+# and clean up - lots of excess files in here
 
 # copy in server data
-cp(taf.data.path("tafstocks.csv"), "shiny/data")
+#cp(taf.data.path("tafstocks.csv"), "shiny/data")
 cp("data/map_data.RData", "shiny/data")
 
 

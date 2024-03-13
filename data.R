@@ -66,7 +66,7 @@ map <-
   ) %>%
   addPolygons(
     # data = st_set_precision(shape_eco, precision=10^2),
-    data = shape_eco,
+    data = eco_shape,
     fillColor = "#71B5BC",
     fillOpacity = 0.08,
     color = "black",
@@ -78,7 +78,7 @@ map <-
   ) %>%
   addPolygons(
     # data = st_set_precision(shape_eco, precision=10^2),
-    data = shape_eco,
+    data = eco_shape,
     fillColor = "#F15D2A",
     fillOpacity = 0.7,
     weight = 1,
@@ -88,10 +88,10 @@ map <-
     group = ~Ecoregion
   ) %>%
   setView(lng = -1.235660, lat = 60.346958, zoom = 0.5) %>%
-    # fitBounds(lng1 = -5, lat1 = 35, lng2=40, lat2 = 90) %>%
-    hideGroup(group = shape_eco$Ecoregion)
+  # fitBounds(lng1 = -5, lat1 = 35, lng2=40, lat2 = 90) %>%
+  hideGroup(group = eco_shape$Ecoregion)
 
 # save map data
-vocabs <- list(ecoregions = sort(shape_eco$Ecoregion))
+vocabs <- list(ecoregions = sort(eco_shape$Ecoregion))
 
 save(map, vocabs, file = "data/map_data.RData")

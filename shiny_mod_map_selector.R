@@ -36,7 +36,7 @@ mod_map_selector_server <- function(id) {
         selected$groups <- c(selected$groups, input$map_selector_shape_click$id)
       }
 
-      if (input$map_selector_shape_click$group %in% eco_shape$Ecoregion) {
+      if (input$map_selector_shape_click$group %in% vocabs$ecoregions) {
         proxy_map %>% hideGroup(input$map_selector_shape_click$group)
 
         selected$groups <- setdiff(selected$groups, input$map_selector_shape_click$group)
