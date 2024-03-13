@@ -1,0 +1,43 @@
+## Before:
+## After:
+
+library(icesTAF)
+
+# create all folders
+mkdir("shiny")
+mkdir("shiny/data")
+
+
+# copy in required data
+cp("boot/initial/data/*", "shiny/data")
+
+# copy in utilities
+cp("utilities_ecoregion_mapping.R", "shiny")
+cp("utilities_JS_callbacks.R", "shiny")
+cp("utilities_load_ecoregion_shp.R", "shiny")
+cp("utilities_plotting.R", "shiny")
+cp("utilities_webservices.R", "shiny")
+
+# copy in server and ui scripts
+cp("shiny_ui.R", "shiny/ui.R")
+cp("shiny_server.R", "shiny/server.R")
+cp("mod_01_map_selector.R", "shiny/mod_01_map_selector.R")
+# cp("shiny_mod_03_biological_production.R", "shiny/mod_03_biological_production.R")
+# cp("shiny_mod_06_VPA.R", "shiny/mod_06_VPA.R")
+
+# copy over examples
+# cp("shiny_mod_examples.R", "shiny/mod_examples.R")
+
+# filenames <-
+#   c(
+#     "02_model_fitting", "03_biological_production", "04_biomass_dynamics",
+#     "06_VPA", "07_YPR_SPR", "08_MSY", "09_SCA"
+#   )
+
+# for (filename in filenames) {
+#   cp(paste0("report/shiny_", filename, ".md"), paste0("shiny/", filename, ".md"))
+#   mkdir(paste0("shiny/", filename, ""))
+#   cp(paste0("report/", filename, "/"), "shiny")
+# }
+
+msg("Created shiny app. To run, use: \n\n\tlibrary(shiny)\n\trunApp('shiny')\n\n")
