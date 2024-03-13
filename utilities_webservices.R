@@ -1,6 +1,6 @@
-getListStockAssessments <- function(){
-    stocklist <- jsonlite::read_json("https://adminweb06.ices.dk/api/getListStockAssessments", simplifyVector = TRUE)
-    return(stocklist)
+getListStockAssessments <- function() {
+  stocklist <- jsonlite::read_json("https://adminweb06.ices.dk/api/getListStockAssessments", simplifyVector = TRUE)
+  return(stocklist)
 }
 
 getEGStatistics <- function() {
@@ -21,16 +21,16 @@ get_icon <- function(text) {
   if (nchar(text) == 0) {
     x <- paste(shiny::icon("folder-open"))
   } else if (text == "csv") {
-    x <- paste(shiny::icon('file-csv'))
+    x <- paste(shiny::icon("file-csv"))
   } else if (text == "png") {
-    x <- paste(shiny::icon('file-image'))
+    x <- paste(shiny::icon("file-image"))
   } else if (text == "rds" | text == "R" | text == "r") {
-    x <- paste(shiny::icon('r-project'))
+    x <- paste(shiny::icon("r-project"))
   } else if (text == "txt") {
-    x <- paste(shiny::icon('code'))
+    x <- paste(shiny::icon("code"))
   } else if (text == "bib") {
-    x <- paste(shiny::icon('book'))
-  } else{
+    x <- paste(shiny::icon("book"))
+  } else {
     x <- ""
   }
   return(x)
@@ -43,7 +43,7 @@ CreateInteractiveTreeDF <- function(repo) {
   #   include.dirs = TRUE
   # )
 
-  paths <-jsonlite::read_json(paste0("https://adminweb06.ices.dk/api/dir/",repo), simplifyVector = TRUE)
+  paths <- jsonlite::read_json(paste0("https://adminweb06.ices.dk/api/dir/", repo), simplifyVector = TRUE)
   # print(paths)
   # to clean off initial path -  will not need this in production
   paths <- paths[!(grepl("/[.]git", paths) | grepl("(bootstrap|boot)/library", paths))]
@@ -62,16 +62,14 @@ CreateInteractiveTreeDF <- function(repo) {
   return(output)
 }
 
-CreateInteractiveTreeHTML <- function(output){
-
+CreateInteractiveTreeHTML <- function(output) {
   makeOne <- function(i) {
     paste0(
       paste(rep("  ", output$level[i] - 1), collapse = ""),
       "* ",
-       sapply( output$FileFormats[i], get_icon),
-       " ",
-       tags$a(href = "#", id = i, output$filename[i])
-
+      sapply(output$FileFormats[i], get_icon),
+      " ",
+      tags$a(href = "#", id = i, output$filename[i])
     )
   }
 
