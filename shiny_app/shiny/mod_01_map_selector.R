@@ -1,3 +1,6 @@
+source("utilities_ecoregion_mapping.r")
+source("utilities_load_ecoregion_shp.r")
+
 #' map_selector UI Function
 #'
 #' @description A shiny Module.
@@ -11,15 +14,15 @@ mod_map_selector_ui <- function(id){
   ns <- NS(id)
   tagList(
     
-        leaflet::leafletOutput(ns("map")), 
-        selectizeInput(
+        leaflet::leafletOutput(ns("map")),
+        virtualSelectInput(
           inputId = ns("selected_locations"),
           label = "Case study regions",
           choices = sort(eco_shape$Ecoregion),
           selected = "Greater North Sea",
           multiple = FALSE,
-          width = "100%",
-          options = list(placeholder = "Select Ecoregion(s)"))
+          width = "100%")
+        #   options = list(placeholder = "Select Ecoregion(s)"))
   )
 }
     
@@ -29,11 +32,14 @@ mod_map_selector_ui <- function(id){
 mod_map_selector_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    output$map <- leaflet::renderLeaflet({
-      map_ecoregion(shape_eco, eu_shape)
+
+
+    output$map <- renderLeaflet({
+      x <- map_ecoregion(shape_eco, eu_shape)
+      x
     })
     
-    proxy_map <- leaflet::leafletProxy("map")
+    proxy_map <- leaflet::leafletProxy(ns("map"))
     
     # create empty vector to hold all click ids
     selected_1 <- reactiveValues(groups = vector())
@@ -48,8 +54,8 @@ mod_map_selector_server <- function(id){
           leaflet::showGroup(group = input$map_shape_click$id)
       }
       
-      updateSelectizeInput(session,
-                           inputId = "selected_locations",
+      updateVirtualSelect(session,
+                           inputId = ns("selected_locations"),
                            choices = eco_shape$Ecoregion,
                            selected = selected_1$groups)
     })
@@ -75,7 +81,7 @@ mod_map_selector_server <- function(id){
                  },
                  ignoreNULL = FALSE
                 )
-    return(reactive(selected_1$groups))
+    # return(reactive(selected_1$groups))
   })
 }
 
