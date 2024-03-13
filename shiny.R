@@ -6,10 +6,9 @@ library(icesTAF)
 # create all folders
 mkdir("shiny")
 mkdir("shiny/data")
-mkdir("shiny/www")
 
 # copy in www data
-#cp(taf.data.path("www/*"), "shiny/www")
+cp(taf.data.path("www"), "shiny")
 # need to move css and js code out of here I think
 # and clean up - lots of excess files in here
 
