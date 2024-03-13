@@ -8,8 +8,8 @@ mod_map_selector_ui <- function(id) {
         virtualSelectInput(
           inputId = ns("selected_locations"),
           label = "ICES Ecoregions",
-          choices = sort(eco_shape$Ecoregion),
-          selected = "Greater North Sea",
+          choices = vocabs$ecoregions,
+          selected = grep("North Sea", vocabs$ecoregions, value = TRUE),
           multiple = TRUE,
           width = "100%"
         )
@@ -17,7 +17,6 @@ mod_map_selector_ui <- function(id) {
     )
   )
 }
-
 
 mod_map_selector_server <- function(id) {
   moduleServer(id, function(input, output, session) {
@@ -32,22 +31,18 @@ mod_map_selector_server <- function(id) {
 
     observeEvent(input$map_selector_shape_click, {
       if (input$map_selector_shape_click$group == "Eco_regions") {
-        proxy_map %>%
-          showGroup(input$map_selector_shape_click$id)
+        proxy_map %>% showGroup(input$map_selector_shape_click$id)
 
         selected$groups <- c(selected$groups, input$map_selector_shape_click$id)
-
-        updateVirtualSelect("selected_locations", selected = selected$groups)
       }
 
       if (input$map_selector_shape_click$group %in% eco_shape$Ecoregion) {
-        proxy_map %>%
-          hideGroup(input$map_selector_shape_click$group)
+        proxy_map %>% hideGroup(input$map_selector_shape_click$group)
 
         selected$groups <- setdiff(selected$groups, input$map_selector_shape_click$group)
-
-        updateVirtualSelect("selected_locations", selected = selected$groups)
       }
+
+      updateVirtualSelect("selected_locations", selected = selected$groups)
     })
 
     observeEvent(input$selected_locations,
@@ -70,6 +65,3 @@ mod_map_selector_server <- function(id) {
 
   })
 }
-
-#load("data/map_data.RData", environment(mod_map_selector_server))
-load("data/map_data.RData")

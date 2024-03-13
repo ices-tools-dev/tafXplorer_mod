@@ -92,4 +92,6 @@ map <-
     hideGroup(group = shape_eco$Ecoregion)
 
 # save map data
-save(map, shape_eco, eu_shape, file = "data/map_data.RData")
+vocabs <- list(ecoregions = sort(shape_eco$Ecoregion))
+
+save(map, vocabs, file = "data/map_data.RData")
