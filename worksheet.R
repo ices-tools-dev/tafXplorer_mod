@@ -4,7 +4,8 @@ library(shiny)
 
 draft.data() #
 
-source.taf("shiny.R"); runApp('shiny', launch.browser = FALSE)
+source.taf("shiny.R"); runApp('shiny', launch.browser = TRUE)
 
 
-taf.boot.path
+taf.boot.path()
+source.taf("data.R")

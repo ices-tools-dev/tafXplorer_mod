@@ -2,9 +2,9 @@ mod_map_selector_ui <- function(id) {
   ns <- NS(id)
   tagList(
     fluidPage(
-      column(6, leaflet::leafletOutput(ns("map_selector"))),
-      column(
-        6,
+      column(4, 
+        leaflet::leafletOutput(ns("map_selector")),
+      
         virtualSelectInput(
           inputId = ns("selected_locations"),
           label = "ICES Ecoregions",
