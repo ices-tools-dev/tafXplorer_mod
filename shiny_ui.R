@@ -20,7 +20,7 @@ ui <- fluidPage(
   navbarPage(
     title = "tafXplorer",
     tabPanel(
-      "Map",
+      "Assessment selection",
       mod_map_selector_ui("map_selector_1")
     )
   )

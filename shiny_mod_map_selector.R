@@ -16,11 +16,11 @@ mod_map_selector_ui <- function(id) {
         select_group_ui(
           id = ns("my-filters"),
           params = list(
-            year = list(inputId = "year", title = "Assessment year:"),
-            stockCode = list(inputId = "stockCode", title = "Stock code:"),
-            species = list(inputId = "species", title = "Common name:"),
-            expertGroup = list(inputId = "expertGroup", title = "Expert group:"),
-            dataCategory = list(inputId = "dataCategory", title = "Data category:")
+            year = list(inputId = "year", label = "Assessment year:"),
+            stockCode = list(inputId = "stockCode", label = "Stock code:"),
+            species = list(inputId = "species", label = "Common name:"),
+            expertGroup = list(inputId = "expertGroup", label = "Expert group:"),
+            dataCategory = list(inputId = "dataCategory", label = "Data category:")
           ),
           inline = FALSE,
           vs_args = list(
