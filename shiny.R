@@ -23,6 +23,9 @@ cp("utilities_webservices.R", "shiny/utilities_webservices.R")
 # copy in server and ui scripts
 cp("shiny_ui.R", "shiny/ui.R")
 cp("shiny_server.R", "shiny/server.R")
+
+# copy in modules' scripts
 cp("shiny_mod_map_selector.R", "shiny/mod_map_selector.R")
+cp("shiny_mod_fileTree.R", "shiny/mod_fileTree.R")
 
 msg("Created shiny app. To run, use: \n\n\tlibrary(shiny)\n\trunApp('shiny')\n\n")

@@ -5,6 +5,9 @@ library(datamods)
 library(stringr)
 library(reactable)
 library(dplyr)
+library(data.tree)
+library(shinyAce)
+library(wesanderson)
 
 ########## Load utilities ############
 source("utilities_webservices.R")
@@ -14,6 +17,7 @@ load("data/map_data.RData", envir = .GlobalEnv)
 
 ######### Load modules ##############
 source("mod_map_selector.R")
+source("mod_fileTree.R")
 
 # shiny user interface
 ui <- fluidPage(
@@ -22,6 +26,10 @@ ui <- fluidPage(
     tabPanel(
       "Assessment selection",
       mod_map_selector_ui("map_selector_1")
+    ),
+    tabPanel(
+      "Assessment results",
+      mod_fileTree_ui("fileTree_1")
     )
   )
 )
