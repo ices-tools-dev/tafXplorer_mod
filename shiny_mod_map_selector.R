@@ -2,9 +2,9 @@ mod_map_selector_ui <- function(id) {
   ns <- NS(id)
   tagList(
     fluidPage(
-      column(4, 
+      column(
+        4,
         leaflet::leafletOutput(ns("map_selector")),
-      
         virtualSelectInput(
           inputId = ns("selected_locations"),
           label = "ICES Ecoregions",
@@ -12,7 +12,26 @@ mod_map_selector_ui <- function(id) {
           selected = grep("North Sea", vocabs$ecoregions, value = TRUE),
           multiple = TRUE,
           width = "100%"
+        ),
+        select_group_ui(
+          id = ns("my-filters"),
+          params = list(
+            year = list(inputId = "year", title = "Assessment year:"),
+            stockCode = list(inputId = "stockCode", title = "Stock code:"),
+            species = list(inputId = "species", title = "Common name:"),
+            expertGroup = list(inputId = "expertGroup", title = "Expert group:"),
+            dataCategory = list(inputId = "dataCategory", title = "Data category:")
+          ),
+          inline = FALSE,
+          vs_args = list(
+            search = TRUE,
+            optionsCount = 5
+          )
         )
+      ),
+      column(
+        8,
+         reactableOutput(ns("table"))
       )
     )
   )
@@ -64,6 +83,80 @@ mod_map_selector_server <- function(id) {
       },
       ignoreNULL = FALSE
     )
+
+    repo_list <- reactive({
+      req(input$selected_locations)
+      stock_list_long <- getListStockAssessments()
+      stock_list_long <- purrr::map_dfr(
+        .x = input$selected_locations,
+        .f = function(.x) stock_list_long %>% dplyr::filter(str_detect(ecoregion, .x))
+      )
+
+      if (nrow(stock_list_long) != 0) {
+        stock_list_long %>%
+          dplyr::arrange(stockCode) %>%
+          dplyr::mutate(
+            # EcoRegion = removeWords(EcoRegion, "Ecoregion"),
+            Select = sprintf('<input type="radio" name="rdbtn" value="rdbtn_%s"/>', 1:nrow(.)),
+            RepoUrl = paste0("<a href='", gitHubUrl, "' target='_blank'>Link")
+            # stock_description = purrr::map_chr(StockKeyLabel, .f = ~ access_sag_data_local(.x, input$selected_years)$StockDescription[1]),
+            # stock_location = parse_location_from_stock_description(stock_description)
+          )
+      }
+    })
+    group_filter_temp <- select_group_server(
+      id = "my-filters",
+      data = repo_list(),
+      vars = reactive(c(
+        "year", "stockCode", "species", "expertGroup", "dataCategory"
+      ))
+    )
+
+    group_filter <- reactive({
+      validate(
+        need(!nrow(repo_list()) == 0, "No published stocks in the selected ecoregion and year")
+      )
+
+    group_filter_temp() %>% select(
+      "Select",
+      "stockCode",
+      "year",
+      # "EcoRegion",
+      # "icon",
+      "species",
+      "expertGroup",
+      "dataCategory",
+      "RepoUrl"
+    ) %>%
+      rename(
+        "Select" = Select,
+        "Stock code" = stockCode,
+        "Year"= year,
+        # "Ecoregion" = EcoRegion,
+        # " " = icon,
+        "Common name" = species,
+        "Expert group" = expertGroup,
+        "Data category" = dataCategory,
+        "Repo Url" = RepoUrl
+      )
+  })
+
+  output$table <- renderReactable({
+    reactable(group_filter(),
+      # selection = "single",
+      filterable = TRUE,
+      columns = list(
+        Select = reactable::colDef(
+          html = TRUE,
+          filterable = FALSE
+        ),
+        "Repo Url" = reactable::colDef(
+          html = TRUE,
+          filterable = FALSE
+        )
+      )
+    )
+  })
 
   })
 }

@@ -1,9 +1,13 @@
 library(shiny)
 library(shinyWidgets)
 library(leaflet)
+library(datamods)
+library(stringr)
+library(reactable)
+library(dplyr)
 
 ########## Load utilities ############
-# none yet
+source("utilities_webservices.R")
 
 # load app data
 load("data/map_data.RData", envir = .GlobalEnv)

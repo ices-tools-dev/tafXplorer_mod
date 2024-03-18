@@ -18,7 +18,7 @@ cp("data/map_data.RData", "shiny/data")
 
 
 # copy in utilities
-# no utilities required so far
+cp("utilities_webservices.R", "shiny/utilities_webservices.R")
 
 # copy in server and ui scripts
 cp("shiny_ui.R", "shiny/ui.R")
