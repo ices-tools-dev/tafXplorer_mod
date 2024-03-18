@@ -24,5 +24,6 @@ cp("utilities_webservices.R", "shiny/utilities_webservices.R")
 cp("shiny_ui.R", "shiny/ui.R")
 cp("shiny_server.R", "shiny/server.R")
 cp("shiny_mod_map_selector.R", "shiny/mod_map_selector.R")
+cp("shiny_mod_navigation.R", "shiny/mod_navigation.R")
 
 msg("Created shiny app. To run, use: \n\n\tlibrary(shiny)\n\trunApp('shiny')\n\n")
