@@ -97,7 +97,7 @@ mod_map_selector_server <- function(id) {
           dplyr::arrange(stockCode) %>%
           dplyr::mutate(
             # EcoRegion = removeWords(EcoRegion, "Ecoregion"),
-            Select = sprintf('<input type="radio" name="rdbtn" value="rdbtn_%s"/>', 1:nrow(.)),
+            # Select = sprintf('<input type="radio" name="rdbtn" value="rdbtn_%s"/>', 1:nrow(.)),
             RepoUrl = paste0("<a href='", gitHubUrl, "' target='_blank'>Link")
             # stock_description = purrr::map_chr(StockKeyLabel, .f = ~ access_sag_data_local(.x, input$selected_years)$StockDescription[1]),
             # stock_location = parse_location_from_stock_description(stock_description)
@@ -118,7 +118,7 @@ mod_map_selector_server <- function(id) {
       )
 
     group_filter_temp() %>% select(
-      "Select",
+      # "Select",
       "stockCode",
       "year",
       # "EcoRegion",
@@ -129,7 +129,7 @@ mod_map_selector_server <- function(id) {
       "RepoUrl"
     ) %>%
       rename(
-        "Select" = Select,
+        # "Select" = Select,
         "Stock code" = stockCode,
         "Year"= year,
         # "Ecoregion" = EcoRegion,
@@ -140,16 +140,14 @@ mod_map_selector_server <- function(id) {
         "Repo Url" = RepoUrl
       )
   })
+  
 
   output$table <- renderReactable({
     reactable(group_filter(),
-      # selection = "single",
+      selection = "single",
       filterable = TRUE,
+      onClick = "select",
       columns = list(
-        Select = reactable::colDef(
-          html = TRUE,
-          filterable = FALSE
-        ),
         "Repo Url" = reactable::colDef(
           html = TRUE,
           filterable = FALSE
@@ -158,5 +156,11 @@ mod_map_selector_server <- function(id) {
     )
   })
 
+  selected <- reactive(getReactableState("table", "selected"))
+  
+  observe({
+    print(group_filter()[selected(), ])
+  })
+  
   })
 }
