@@ -93,7 +93,7 @@ CreateInteractiveTreeHTML <- function(output) {
   )
   # cat(all)
   html <- markdown::mark(text = all)
-browser()
+# browser()
   return(html)
 }
 

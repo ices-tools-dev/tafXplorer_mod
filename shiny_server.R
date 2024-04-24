@@ -20,14 +20,14 @@ server <- function(input, output, session) {
             "tabset",
             tabPanel(
               query$repo,
-              fluidPage(
-                column(
-                  5,
-                  mod_file_tree_ui("file_tree_1")
+              layout_sidebar(
+                sidebar = sidebar(
+                  mod_file_tree_ui(paste0("file_tree_", length(repos()))),
+                  width = "40%"
                 ),
-                column(
-                  7,
-                  mod_file_viz_ui("file_viz_1")
+                card(
+                  card_header(paste0("File: ", "filename")),
+                  card_body(mod_file_viz_ui(paste0("file_viz_", length(repos()))))
                 )
               )
             ),
@@ -62,14 +62,14 @@ server <- function(input, output, session) {
             "tabset",
             tabPanel(
               query$repo,
-              fluidPage(
-                column(
-                  5,
-                  mod_file_tree_ui(paste0("file_tree_", length(repos())))
+              layout_sidebar(
+                sidebar = sidebar(
+                  mod_file_tree_ui(paste0("file_tree_", length(repos()))),
+                  width = "40%"
                 ),
-                column(
-                  7,
-                  mod_file_viz_ui(paste0("file_viz_", length(repos())))
+                card(
+                  card_header(paste0("File: ", "filename")),
+                  card_body(mod_file_viz_ui(paste0("file_viz_", length(repos()))))
                 )
               )
             ),
