@@ -1,3 +1,17 @@
+
+updateURL <- function(tab = NULL, repo = NULL, file = NULL, mode = "push") {
+
+  query <- list(tab = tab, repo = repo, file = file)
+  if (all(sapply(query, is.null))) {
+    query <- "?"
+  } else {
+    query <- paste0("?", httr:::compose_query(httr:::compact(query)))
+  }
+
+  updateQueryString(query, mode)
+}
+
+
 getListStockAssessments <- function() {
   stocklist <- jsonlite::read_json("https://adminweb06.ices.dk/api/getListStockAssessments", simplifyVector = TRUE)
   return(stocklist)
@@ -44,7 +58,7 @@ CreateInteractiveTreeDF <- function(repo) {
   # )
 
   paths <- jsonlite::read_json(paste0("https://adminweb06.ices.dk/api/dir/", repo), simplifyVector = TRUE)
-  # print(paths)
+
   # to clean off initial path -  will not need this in production
   paths <- paths[!(grepl("/[.]git", paths) | grepl("(bootstrap|boot)/library", paths))]
 
@@ -54,7 +68,7 @@ CreateInteractiveTreeDF <- function(repo) {
   output$filename <- basename(output$pathString)
   # output$filename <- paste0("`r shiny::icon('markdown')` ", output$filename)
 
-  output$urlString <- paste0("https://ices-taf.shinyapps.io/tafxplorer/?Assessmentresults?pathstring=", output$pathString, "&repo=", repo)
+  output$urlString <- paste0("https://ices-tools-dev.shinyapps.io/tafxplorer/?repo=", repo)
   output$ServerUrlString <- paste0("https://adminweb06.ices.dk/api/blob/", output$pathString)
   # could be handy for file icons
   output$FileFormats <- tools::file_ext(output$filename)
@@ -79,7 +93,7 @@ CreateInteractiveTreeHTML <- function(output) {
   )
   # cat(all)
   html <- markdown::mark(text = all)
-
+browser()
   return(html)
 }
 

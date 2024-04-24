@@ -9,6 +9,7 @@ library(data.tree)
 library(shinyAce)
 library(wesanderson)
 library(shinyjs)
+library(bslib)
 
 ########## Load utilities ############
 source("utilities_webservices.R")
@@ -18,27 +19,24 @@ load("data/map_data.RData", envir = .GlobalEnv)
 
 ######### Load modules ##############
 source("mod_map_selector.R")
-source("mod_fileTree.R")
+source("mod_file_tree.R")
+source("mod_file_viz.R")
 
 # shiny user interface
 ui <- fluidPage(
- tags$head(
+  tags$head(
     useShinyjs(),
     # introjsUI(),
     tags$script(src = "https://kit.fontawesome.com/ac71e9cf8e.js"),
     tags$script(src = "detect_click2.js")
- ),
+  ),
   navbarPage(
     title = "tafXplorer",
     id = "tabset",
+    selected = "Stock assessment selection",
     tabPanel(
       "Stock assessment selection",
       mod_map_selector_ui("map_selector_1")
-    ),
-    tabPanel(
-      "Assessment results",
-      mod_fileTree_ui("fileTree_1")
     )
   )
-
 )

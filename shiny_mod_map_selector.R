@@ -140,7 +140,7 @@ mod_map_selector_server <- function(id) {
         "Repo Url" = RepoUrl
       )
   })
-  
+
 
   output$table <- renderReactable({
     reactable(group_filter(),
@@ -157,16 +157,13 @@ mod_map_selector_server <- function(id) {
   })
 
   selected <- reactive(getReactableState("table", "selected"))
-  
+
   observe({
     selected_row <- group_filter_temp()[selected(), ]
-    print(selected_row)
-    if (length(selected_row) > 0) {
-      updateQueryString(paste0("?tab=Assessment%20results&repo=", basename(selected_row$gitHubUrl)), mode = "push")
+    if (nrow(selected_row) > 0) {
+      updateURL(repo = basename(selected_row$gitHubUrl))
     }
   })
 
-
-  
   })
 }
