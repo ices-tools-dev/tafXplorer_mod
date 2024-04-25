@@ -1,7 +1,6 @@
 # extras - need to put these in a more sensibly named utilitied script
 
 updateURL <- function(tab = NULL, repo = NULL, file = NULL, mode = "push") {
-
   query <- list(tab = tab, repo = repo, file = file)
   if (all(sapply(query, is.null))) {
     query <- "?"
@@ -99,7 +98,7 @@ CreateInteractiveTreeHTML <- function(output, ns) {
       "* ",
       sapply(output$FileFormats[i], get_icon),
       " ",
-      tags$a(href = "#", id = ns(output$filename[i]), output$filename[i], class = "taf-tree-node")
+      tags$a(href = "#", id = ns(i), output$filename[i], class = "taf-tree-node")
     )
   }
 
@@ -109,9 +108,111 @@ CreateInteractiveTreeHTML <- function(output, ns) {
   )
   # cat(all)
   html <- markdown::mark(text = all)
-# browser()
+  # browser()
   return(html)
 }
+
+
+
+
+getFileUI <- function(info) {
+  # Download the file from the URL
+  file_extension <- tolower(tools::file_ext(info$ServerUrlString))
+  # print(file_extension)
+  fileURL <- URLencode(info$ServerUrlString)
+
+  if (file_extension == "csv") {
+    # data <- read.table(fileURL, sep = ",", header = TRUE)
+
+    renderTable({
+      fileToDisplay <- read.table(fileURL, sep = ",", header = TRUE)
+    })
+    # output$downloadCSV <- downloadHandler(
+    #   filename = function() {
+    #     paste("downloaded_data.csv")
+    #   },
+    #   content = function(file) {
+    #     write.csv(data, file)
+    #   }
+    # )
+  } else if (file_extension == "png") {
+    renderText({
+      c('<img src="', fileURL, '" width="85%" height="85%">')
+    })
+    # output$fileViewer <- renderImage({
+    #   list(src = input$urlInput, contentType = "image/png")
+    # }, deleteFile = FALSE)
+  } else if (file_extension == "bib") {
+    renderUI({
+      fileToDisplay <- getURL(fileURL)
+      # html_text <- gsub("\r\n", "</br>", fileToDisplay)
+      # HTML(html_text)
+
+      aceEditor(
+        outputId = "code_bib",
+        value = fileToDisplay,
+        mode = "yaml",
+        theme = "clouds_midnight",
+        fontSize = 14,
+        height = "80vh",
+        readOnly = TRUE
+      )
+    })
+  } else if (file_extension %in% c("r", "R", "Rmd")) {
+    renderUI({
+      fileToDisplay <- getURL(fileURL)
+      # print(fileToDisplay)
+      # html_text <- gsub("\r\n", "</br>", fileToDisplay)
+      # HTML(html_text)
+      # HTML(paste("<pre><code>", html_text, "</code></pre>"))
+
+      aceEditor(
+        outputId = "code",
+        value = fileToDisplay,
+        mode = "r",
+        theme = "chrome",
+        fontSize = 14,
+        height = "80vh",
+        readOnly = TRUE
+      )
+    })
+  } else if (file_extension == "md") {
+    renderUI({
+      fileToDisplay <- getURL(fileURL)
+      HTML(markdown::mark(fileToDisplay))
+      # print(fileToDisplay)
+      # html_text <- gsub("\r\n", "</br>", fileToDisplay)
+      # HTML(html_text)
+    })
+  } else if (file_extension == "html") {
+    renderUI({
+      fileToDisplay <- getURL(fileURL)
+      HTML(fileToDisplay)
+      # print(fileToDisplay)
+      # html_text <- gsub("\r\n", "</br>", fileToDisplay)
+      # HTML(html_text)
+    })
+  } else if (file_extension %in% c("txt", "dat")) {
+    renderUI({
+      fileToDisplay <- getURL(fileURL)
+      aceEditor(
+        outputId = "code",
+        value = fileToDisplay,
+        mode = "text",
+        theme = "chrome",
+        fontSize = 14,
+        height = "80vh",
+        readOnly = TRUE
+      )
+    })
+  } else {
+    # shinyjs::alert("Invalid file type or file format.")
+  }
+}
+
+
+
+
 
 
 # path <- "./Data/ices_cat_3_template"

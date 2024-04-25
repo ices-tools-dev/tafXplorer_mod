@@ -142,7 +142,7 @@ server <- function(input, output, session) {
   mod_file_tree_server("file_tree_2", file_tree)
   mod_file_tree_server("file_tree_3", file_tree)
 
-  mod_file_viz_server("file_viz_1", repos, filenames)
-  mod_file_viz_server("file_viz_2", repos, filenames)
-  mod_file_viz_server("file_viz_3", repos, filenames)
+  mod_file_viz_server("file_viz_1", repos, file_tree, filenames)
+  mod_file_viz_server("file_viz_2", repos, file_tree, filenames)
+  mod_file_viz_server("file_viz_3", repos, file_tree, filenames)
 }

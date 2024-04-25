@@ -10,6 +10,7 @@ library(shinyAce)
 library(wesanderson)
 library(shinyjs)
 library(bslib)
+library(RCurl)
 
 ########## Load utilities ############
 source("utilities_webservices.R")
