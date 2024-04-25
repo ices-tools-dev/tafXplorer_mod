@@ -106,6 +106,7 @@ server <- function(input, output, session) {
 
     repos[[slot_to_free]] <- NULL
     file_tree[[slot_to_free]] <- NULL
+    filenames(filenames()[!grepl(slot_to_free, filenames())])
 
     free_slots(c(free_slots(), gsub("file_tree_", "", slot_to_free)))
 

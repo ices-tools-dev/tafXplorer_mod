@@ -29,7 +29,7 @@ mod_file_viz_server <- function(id, repos, file_tree, filenames) {
 
     output$file_viz <- renderUI({
       lapply(
-        files(),
+        rev(files()),
         function(i) {
           card(
             card_header(
