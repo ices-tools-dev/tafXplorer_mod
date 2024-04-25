@@ -115,7 +115,7 @@ CreateInteractiveTreeHTML <- function(output, ns) {
 
 
 
-getFileUI <- function(info) {
+getFileUI <- function(info, ns) {
   # Download the file from the URL
   file_extension <- tolower(tools::file_ext(info$ServerUrlString))
   # print(file_extension)
@@ -149,7 +149,7 @@ getFileUI <- function(info) {
       # HTML(html_text)
 
       aceEditor(
-        outputId = "code_bib",
+        outputId = ns("code_bib"),
         value = fileToDisplay,
         mode = "yaml",
         theme = "clouds_midnight",
@@ -167,7 +167,7 @@ getFileUI <- function(info) {
       # HTML(paste("<pre><code>", html_text, "</code></pre>"))
 
       aceEditor(
-        outputId = "code",
+        outputId = ns("code"), ,
         value = fileToDisplay,
         mode = "r",
         theme = "chrome",
@@ -196,7 +196,7 @@ getFileUI <- function(info) {
     renderUI({
       fileToDisplay <- getURL(fileURL)
       aceEditor(
-        outputId = "code",
+        outputId = ns("dat"),
         value = fileToDisplay,
         mode = "text",
         theme = "chrome",

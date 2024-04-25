@@ -34,7 +34,7 @@ mod_file_viz_server <- function(id, repos, file_tree, filenames) {
           card(
             card_header(paste0("File: ", tree()$filename[i])),
             card_body(
-              getFileUI(tree()[i, ])
+              getFileUI(tree()[i, ], ns)
             )
           )
         }
