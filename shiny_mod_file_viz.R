@@ -32,7 +32,16 @@ mod_file_viz_server <- function(id, repos, file_tree, filenames) {
         files(),
         function(i) {
           card(
-            card_header(paste0("File: ", tree()$filename[i])),
+            card_header(
+                tags$span(
+                  "File: ",
+                  tags$a(
+                    tree()$filename[i],
+                    href = URLencode(tree()$ServerUrlString[i]),
+                    target = "_blank"
+                  )
+                )
+              ),
             card_body(
               getFileUI(tree()[i, ], ns)
             )
