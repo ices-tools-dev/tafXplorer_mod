@@ -19,7 +19,7 @@ mod_file_viz_server <- function(id, repos, filenames) {
     })
 
 observe({
-  print(paste(repos()[id_int], ":", paste(files(), collapse = ", ")))
+  print(paste(repos[[file_tree_id]], ":", paste(files(), collapse = ", ")))
 })
 
 output$file_viz <- renderUI({

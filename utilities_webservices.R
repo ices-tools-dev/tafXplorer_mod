@@ -1,3 +1,4 @@
+# extras - need to put these in a more sensibly named utilitied script
 
 updateURL <- function(tab = NULL, repo = NULL, file = NULL, mode = "push") {
 
@@ -10,6 +11,21 @@ updateURL <- function(tab = NULL, repo = NULL, file = NULL, mode = "push") {
 
   updateQueryString(query, mode)
 }
+
+## tab title with close button
+tab_title <- function(name) {
+  tags$span(
+    name,
+    tags$span(icon("times"),
+      style = "margin-left: 5px;",
+      onclick = paste0("Shiny.setInputValue(\"", paste0("remove_tab"), "\", \"", name, "\", {priority: \"event\"})")
+    )
+  )
+}
+
+
+
+
 
 
 getListStockAssessments <- function() {

@@ -6,7 +6,7 @@ server <- function(input, output, session) {
   nslots <- 3
   free_slots <- reactiveVal(paste(1:nslots))
   file_tree <- reactiveValues()
-  repos <- reactiveVal(character(0))
+  repos <- reactiveValues()
   filenames <- reactiveVal(character(0))
 
   # observe first url
@@ -20,12 +20,12 @@ server <- function(input, output, session) {
           # not valid
           updateURL()
         } else {
-          repos(query$repo)
+          repos[[paste0("file_tree_", free_slots()[1])]] <- query$repo
           file_tree[[paste0("file_tree_", free_slots()[1])]] <- CreateInteractiveTreeDF(query$repo)
           appendTab(
             "tabset",
             tabPanel(
-              query$repo,
+              tab_title(query$repo),
               layout_sidebar(
                 sidebar = sidebar(
                   mod_file_tree_ui(paste0("file_tree_", free_slots()[1])),
@@ -51,24 +51,26 @@ server <- function(input, output, session) {
       print("observing url")
       query <- getQueryString()
 
+      repos_vec <- unlist(reactiveValuesToList(repos))
+
       if (is.null(query$repo) || query$repo == "") {
         updateURL()
-      } else if (!query$repo %in% repos() && length(repos()) >= nslots) {
+      } else if (!query$repo %in% repos_vec && length(repos_vec) >= nslots) {
         updateURL()
-      } else if (query$repo %in% repos()) {
+      } else if (query$repo %in% repos_vec) {
         updateURL(repo = query$repo, file = query$file) # trim url
-      if (input$tabset != query$repo) {
+      if (trimws(strsplit(input$tabset, "\n")[[1]][2]) != query$repo) {
         updateTabsetPanel(inputId = "tabset", selected = query$repo)
       }
         # some logic for file selection
       } else {
         updateURL(repo = query$repo, file = query$file) # trim url
-        repos(c(repos(), query$repo))
+        repos[[paste0("file_tree_", free_slots()[1])]] <- query$repo
         file_tree[[paste0("file_tree_", free_slots()[1])]] <- CreateInteractiveTreeDF(query$repo)
         appendTab(
           "tabset",
           tabPanel(
-            query$repo,
+            tab_title(query$repo),
             layout_sidebar(
               sidebar = sidebar(
                 mod_file_tree_ui(paste0("file_tree_", free_slots()[1])),
@@ -89,6 +91,18 @@ server <- function(input, output, session) {
     ignoreInit = TRUE
   )
 
+  observeEvent(input$remove_tab, {
+    removeTab(inputId = "tabset", target = paste(tab_title(input$remove_tab)))
+    slot_to_free <- names(which(unlist(reactiveValuesToList(repos)) == input$remove_tab))
+
+    repos[[slot_to_free]] <- NULL
+    file_tree[[slot_to_free]] <- NULL
+
+    free_slots(c(free_slots(), gsub("file_tree_", "", slot_to_free)))
+
+  }, ignoreInit = TRUE)
+
+
   # these only run after initialisation
   observeEvent(input$tabset,
     {
@@ -97,7 +111,8 @@ server <- function(input, output, session) {
         updateURL()
       } else {
         query <- getQueryString()
-        updateURL(repo = input$tabset, file = query$file, mode = "replace")
+        repo <- trimws(strsplit(input$tabset, "\n")[[1]][2])
+        updateURL(repo = repo, file = query$file, mode = "replace")
       }
       onload(FALSE)
     },
@@ -110,7 +125,7 @@ server <- function(input, output, session) {
     print(input$tabset)
     print(session$clientData$url_search)
     print(paste("on load", onload()))
-    print(repos())
+    print(unlist(reactiveValuesToList(repos)))
     print(filenames())
     print(input$clicked_text)
     print("=============")
