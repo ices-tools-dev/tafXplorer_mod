@@ -12,7 +12,9 @@ mod_file_tree_server <- function(id, file_tree) {
     id_int <- as.integer(gsub("file_tree_", "", id))
 
     output$html_tree <- renderUI({
-      HTML(CreateInteractiveTreeHTML(file_tree[[id]], ns))
+      if (!is.null(file_tree[[id]])) {
+        HTML(CreateInteractiveTreeHTML(file_tree[[id]], ns))
+      }
     })
   })
 }
