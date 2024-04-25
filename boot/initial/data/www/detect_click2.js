@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $('body').on('click', 'a', function(evt){
-        Shiny.setInputValue('file_tree_1-clicked_text', evt.target.id);
+    $('body').on('click', 'a.taf-tree-node', function(evt){
+        Shiny.setInputValue('clicked_text', evt.target.id);
     });
 })

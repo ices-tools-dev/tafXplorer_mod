@@ -6,9 +6,29 @@ mod_file_viz_ui <- function(id) {
 }
 
 
-mod_file_viz_server <- function(id, filename) {
+
+mod_file_viz_server <- function(id, repos, filenames) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+    id_int <- as.integer(gsub("file_viz_", "", id))
+    file_tree_id <- paste0("file_tree_", id_int)
+
+    files <- reactive({
+      files <- grep(file_tree_id, filenames(), value = TRUE)
+      gsub(paste0(file_tree_id, "-"), "", files)
+    })
+
+observe({
+  print(paste(repos()[id_int], ":", paste(files(), collapse = ", ")))
+})
+
+output$file_viz <- renderUI({
+  card(
+    card_header(paste0("File: ")),
+    card_body("not working yet")
+  )
+})
+
 
     if (FALSE) {
       observeEvent(selectedFile$name, {

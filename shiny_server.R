@@ -2,7 +2,12 @@
 server <- function(input, output, session) {
   onload <- reactiveVal(TRUE)
 
+  # we take the first free slot
+  nslots <- 3
+  free_slots <- reactiveVal(paste(1:nslots))
+  file_tree <- reactiveValues()
   repos <- reactiveVal(character(0))
+  filenames <- reactiveVal(character(0))
 
   # observe first url
   observeEvent(session$clientData$url_search,
@@ -16,23 +21,23 @@ server <- function(input, output, session) {
           updateURL()
         } else {
           repos(query$repo)
+          file_tree[[paste0("file_tree_", free_slots()[1])]] <- CreateInteractiveTreeDF(query$repo)
           appendTab(
             "tabset",
             tabPanel(
               query$repo,
               layout_sidebar(
                 sidebar = sidebar(
-                  mod_file_tree_ui(paste0("file_tree_", length(repos()))),
+                  mod_file_tree_ui(paste0("file_tree_", free_slots()[1])),
                   width = "40%"
                 ),
-                card(
-                  card_header(paste0("File: ", "filename")),
-                  card_body(mod_file_viz_ui(paste0("file_viz_", length(repos()))))
-                )
+                mod_file_viz_ui(paste0("file_viz_", free_slots()[1]))
               )
             ),
             select = TRUE
           )
+          # remove from empy slot
+          free_slots(free_slots()[-1])
         }
         onload(FALSE)
       }
@@ -48,34 +53,35 @@ server <- function(input, output, session) {
 
       if (is.null(query$repo) || query$repo == "") {
         updateURL()
-      } else if (query$repo %in% repos() || length(repos()) >= 3) {
-        updateURL(repo = query$repo) # trim url
-        if (input$tabset != query$repo) {
-          updateTabsetPanel(inputId = "tabset", selected = query$repo)
-        }
+      } else if (!query$repo %in% repos() && length(repos()) >= nslots) {
+        updateURL()
+      } else if (query$repo %in% repos()) {
+        updateURL(repo = query$repo, file = query$file) # trim url
+      if (input$tabset != query$repo) {
+        updateTabsetPanel(inputId = "tabset", selected = query$repo)
+      }
+        # some logic for file selection
       } else {
-        updateURL(repo = query$repo) # trim url
+        updateURL(repo = query$repo, file = query$file) # trim url
         repos(c(repos(), query$repo))
+        file_tree[[paste0("file_tree_", free_slots()[1])]] <- CreateInteractiveTreeDF(query$repo)
+        appendTab(
+          "tabset",
+          tabPanel(
+            query$repo,
+            layout_sidebar(
+              sidebar = sidebar(
+                mod_file_tree_ui(paste0("file_tree_", free_slots()[1])),
+                width = "40%"
+              ),
+              mod_file_viz_ui(paste0("file_viz_", free_slots()[1]))
+            )
+          ),
+          select = TRUE
+        )
 
-        if (!onload()) {
-          appendTab(
-            "tabset",
-            tabPanel(
-              query$repo,
-              layout_sidebar(
-                sidebar = sidebar(
-                  mod_file_tree_ui(paste0("file_tree_", length(repos()))),
-                  width = "40%"
-                ),
-                card(
-                  card_header(paste0("File: ", "filename")),
-                  card_body(mod_file_viz_ui(paste0("file_viz_", length(repos()))))
-                )
-              )
-            ),
-            select = TRUE
-          )
-        }
+        # remove from empy slot
+        free_slots(free_slots()[-1])
       }
 
       onload(FALSE)
@@ -90,7 +96,8 @@ server <- function(input, output, session) {
       if (input$tabset == "Stock assessment selection") {
         updateURL()
       } else {
-        updateURL(repo = input$tabset)
+        query <- getQueryString()
+        updateURL(repo = input$tabset, file = query$file, mode = "replace")
       }
       onload(FALSE)
     },
@@ -99,19 +106,28 @@ server <- function(input, output, session) {
 
   observe({
     print("---changes---")
+    print(free_slots())
     print(input$tabset)
     print(session$clientData$url_search)
     print(paste("on load", onload()))
     print(repos())
+    print(filenames())
+    print(input$clicked_text)
     print("=============")
   })
 
-  mod_map_selector_server("map_selector_1")
-  filename1 <- mod_file_tree_server("file_tree_1", repos)
-  filename2 <- mod_file_tree_server("file_tree_2", repos)
-  filename3 <- mod_file_tree_server("file_tree_3", repos)
+  observeEvent(input$clicked_text, {
+    if (!input$clicked_text %in% filenames()) {
+      filenames(c(filenames(), input$clicked_text))
+    }
+  })
 
-  mod_file_viz_server("file_viz_1", filename1)
-  mod_file_viz_server("file_viz_2", filename2)
-  mod_file_viz_server("file_viz_3", filename3)
+  mod_map_selector_server("map_selector_1")
+  mod_file_tree_server("file_tree_1", file_tree)
+  mod_file_tree_server("file_tree_2", file_tree)
+  mod_file_tree_server("file_tree_3", file_tree)
+
+  mod_file_viz_server("file_viz_1", repos, filenames)
+  mod_file_viz_server("file_viz_2", repos, filenames)
+  mod_file_viz_server("file_viz_3", repos, filenames)
 }

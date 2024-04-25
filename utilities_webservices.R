@@ -76,14 +76,14 @@ CreateInteractiveTreeDF <- function(repo) {
   return(output)
 }
 
-CreateInteractiveTreeHTML <- function(output) {
+CreateInteractiveTreeHTML <- function(output, ns) {
   makeOne <- function(i) {
     paste0(
       paste(rep("  ", output$level[i] - 1), collapse = ""),
       "* ",
       sapply(output$FileFormats[i], get_icon),
       " ",
-      tags$a(href = "#", id = i, output$filename[i])
+      tags$a(href = "#", id = ns(output$filename[i]), output$filename[i], class = "taf-tree-node")
     )
   }
 
