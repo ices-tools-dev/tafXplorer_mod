@@ -21,7 +21,9 @@ server <- function(input, output, session) {
           updateURL()
         } else {
           repos[[paste0("file_tree_", free_slots()[1])]] <- query$repo
-          file_tree[[paste0("file_tree_", free_slots()[1])]] <- CreateInteractiveTreeDF(query$repo)
+          query_file_tree <- CreateInteractiveTreeDF(query$repo)
+          file_tree[[paste0("file_tree_", free_slots()[1])]] <- query_file_tree
+
           appendTab(
             "tabset",
             tabPanel(
@@ -36,6 +38,14 @@ server <- function(input, output, session) {
             ),
             select = TRUE
           )
+
+          # add files
+          if (!is.null(query$file)) {
+            query_files <- strsplit(query$file, ",")[[1]]
+            query_file_ids <- which(query_file_tree$pathString %in% file.path(query$repo, query_files))
+            filenames(paste0("file_tree_1-", query_file_ids))
+          }
+
           # remove from empy slot
           free_slots(free_slots()[-1])
         }
@@ -59,10 +69,9 @@ server <- function(input, output, session) {
         updateURL()
       } else if (query$repo %in% repos_vec) {
         updateURL(repo = query$repo, file = query$file) # trim url
-      if (trimws(strsplit(input$tabset, "\n")[[1]][2]) != query$repo) {
-        updateTabsetPanel(inputId = "tabset", selected = query$repo)
-      }
-        # some logic for file selection
+        if (trimws(strsplit(input$tabset, "\n")[[1]][2]) != query$repo) {
+          updateTabsetPanel(inputId = "tabset", selected = query$repo)
+        }
       } else {
         updateURL(repo = query$repo, file = query$file) # trim url
         repos[[paste0("file_tree_", free_slots()[1])]] <- query$repo
