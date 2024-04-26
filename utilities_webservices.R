@@ -1,3 +1,32 @@
+# extras - need to put these in a more sensibly named utilitied script
+
+updateURL <- function(tab = NULL, repo = NULL, file = NULL, mode = "push") {
+  query <- list(tab = tab, repo = repo, file = file)
+  if (all(sapply(query, is.null))) {
+    query <- "?"
+  } else {
+    query <- paste0("?", httr:::compose_query(httr:::compact(query)))
+  }
+
+  updateQueryString(query, mode)
+}
+
+## tab title with close button
+tab_title <- function(name) {
+  tags$span(
+    name,
+    tags$span(icon("times"),
+      style = "margin-left: 5px;",
+      onclick = paste0("Shiny.setInputValue(\"", paste0("remove_tab"), "\", \"", name, "\", {priority: \"event\"})")
+    )
+  )
+}
+
+
+
+
+
+
 getListStockAssessments <- function() {
   stocklist <- jsonlite::read_json("https://adminweb06.ices.dk/api/getListStockAssessments", simplifyVector = TRUE)
   return(stocklist)
@@ -44,7 +73,7 @@ CreateInteractiveTreeDF <- function(repo) {
   # )
 
   paths <- jsonlite::read_json(paste0("https://adminweb06.ices.dk/api/dir/", repo), simplifyVector = TRUE)
-  # print(paths)
+
   # to clean off initial path -  will not need this in production
   paths <- paths[!(grepl("/[.]git", paths) | grepl("(bootstrap|boot)/library", paths))]
 
@@ -54,7 +83,7 @@ CreateInteractiveTreeDF <- function(repo) {
   output$filename <- basename(output$pathString)
   # output$filename <- paste0("`r shiny::icon('markdown')` ", output$filename)
 
-  output$urlString <- paste0("https://ices-taf.shinyapps.io/tafxplorer/?Assessmentresults?pathstring=", output$pathString, "&repo=", repo)
+  output$urlString <- paste0("https://ices-tools-dev.shinyapps.io/tafxplorer/?repo=", repo)
   output$ServerUrlString <- paste0("https://adminweb06.ices.dk/api/blob/", output$pathString)
   # could be handy for file icons
   output$FileFormats <- tools::file_ext(output$filename)
@@ -62,14 +91,14 @@ CreateInteractiveTreeDF <- function(repo) {
   return(output)
 }
 
-CreateInteractiveTreeHTML <- function(output) {
+CreateInteractiveTreeHTML <- function(output, ns) {
   makeOne <- function(i) {
     paste0(
       paste(rep("  ", output$level[i] - 1), collapse = ""),
       "* ",
       sapply(output$FileFormats[i], get_icon),
       " ",
-      tags$a(href = "#", id = i, output$filename[i])
+      tags$a(href = "#", id = ns(i), output$filename[i], class = "taf-tree-node")
     )
   }
 
@@ -79,9 +108,111 @@ CreateInteractiveTreeHTML <- function(output) {
   )
   # cat(all)
   html <- markdown::mark(text = all)
-
+  # browser()
   return(html)
 }
+
+
+
+
+getFileUI <- function(info, ns) {
+  # Download the file from the URL
+  file_extension <- tolower(tools::file_ext(info$ServerUrlString))
+  # print(file_extension)
+  fileURL <- URLencode(info$ServerUrlString)
+
+  if (file_extension == "csv") {
+    # data <- read.table(fileURL, sep = ",", header = TRUE)
+
+    renderTable({
+      fileToDisplay <- read.table(fileURL, sep = ",", header = TRUE)
+    })
+    # output$downloadCSV <- downloadHandler(
+    #   filename = function() {
+    #     paste("downloaded_data.csv")
+    #   },
+    #   content = function(file) {
+    #     write.csv(data, file)
+    #   }
+    # )
+  } else if (file_extension == "png") {
+    renderText({
+      c('<img src="', fileURL, '" width="85%" height="85%">')
+    })
+    # output$fileViewer <- renderImage({
+    #   list(src = input$urlInput, contentType = "image/png")
+    # }, deleteFile = FALSE)
+  } else if (file_extension == "bib") {
+    renderUI({
+      fileToDisplay <- getURL(fileURL)
+      # html_text <- gsub("\r\n", "</br>", fileToDisplay)
+      # HTML(html_text)
+
+      aceEditor(
+        outputId = ns("code_bib"),
+        value = fileToDisplay,
+        mode = "yaml",
+        theme = "clouds_midnight",
+        fontSize = 14,
+        height = "80vh",
+        readOnly = TRUE
+      )
+    })
+  } else if (file_extension %in% c("r", "R", "Rmd")) {
+    renderUI({
+      fileToDisplay <- getURL(fileURL)
+      # print(fileToDisplay)
+      # html_text <- gsub("\r\n", "</br>", fileToDisplay)
+      # HTML(html_text)
+      # HTML(paste("<pre><code>", html_text, "</code></pre>"))
+
+      aceEditor(
+        outputId = ns("code"), ,
+        value = fileToDisplay,
+        mode = "r",
+        theme = "chrome",
+        fontSize = 14,
+        height = "80vh",
+        readOnly = TRUE
+      )
+    })
+  } else if (file_extension == "md") {
+    renderUI({
+      fileToDisplay <- getURL(fileURL)
+      HTML(markdown::mark(fileToDisplay))
+      # print(fileToDisplay)
+      # html_text <- gsub("\r\n", "</br>", fileToDisplay)
+      # HTML(html_text)
+    })
+  } else if (file_extension == "html") {
+    renderUI({
+      fileToDisplay <- getURL(fileURL)
+      HTML(fileToDisplay)
+      # print(fileToDisplay)
+      # html_text <- gsub("\r\n", "</br>", fileToDisplay)
+      # HTML(html_text)
+    })
+  } else if (file_extension %in% c("txt", "dat")) {
+    renderUI({
+      fileToDisplay <- getURL(fileURL)
+      aceEditor(
+        outputId = ns("dat"),
+        value = fileToDisplay,
+        mode = "text",
+        theme = "chrome",
+        fontSize = 14,
+        height = "80vh",
+        readOnly = TRUE
+      )
+    })
+  } else {
+    # shinyjs::alert("Invalid file type or file format.")
+  }
+}
+
+
+
+
 
 
 # path <- "./Data/ices_cat_3_template"

@@ -140,7 +140,7 @@ mod_map_selector_server <- function(id) {
         "Repo Url" = RepoUrl
       )
   })
-  
+
 
   output$table <- renderReactable({
     reactable(group_filter(),
@@ -157,10 +157,13 @@ mod_map_selector_server <- function(id) {
   })
 
   selected <- reactive(getReactableState("table", "selected"))
-  
+
   observe({
-    print(group_filter()[selected(), ])
+    selected_row <- group_filter_temp()[selected(), ]
+    if (nrow(selected_row) > 0) {
+      updateURL(repo = basename(selected_row$gitHubUrl))
+    }
   })
-  
+
   })
 }

@@ -4,3 +4,10 @@ callback <- c(
   "  Shiny.setInputValue('rdbtn', value);",
   "});"
 )
+
+# can maybe replace the detect_click2.js file
+#callback2 <- c(
+#  "$('body').on('click', 'a.taf-tree-node', function(evt){",
+#  "  Shiny.setInputValue('clicked_text', evt.target.id);",
+#  "  });"
+#)

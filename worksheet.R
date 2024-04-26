@@ -2,8 +2,11 @@
 library(icesTAF)
 library(shiny)
 
-draft.data() #
+# draft.data() #
+install.deps()
 
+taf.boot()
+source.all()
 source.taf("shiny.R"); runApp('shiny', launch.browser = TRUE)
 
 
