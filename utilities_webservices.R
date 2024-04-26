@@ -127,21 +127,10 @@ getFileUI <- function(info, ns) {
     renderTable({
       fileToDisplay <- read.table(fileURL, sep = ",", header = TRUE)
     })
-    # output$downloadCSV <- downloadHandler(
-    #   filename = function() {
-    #     paste("downloaded_data.csv")
-    #   },
-    #   content = function(file) {
-    #     write.csv(data, file)
-    #   }
-    # )
-  } else if (file_extension == "png") {
-    renderText({
-      c('<img src="', fileURL, '" width="85%" height="85%">')
+  } else if (file_extension %in% c("png", "jpg")) {
+    renderUI({
+      HTML(c('<div><img src="', fileURL, '" width="85%" height="85%"></div>'))
     })
-    # output$fileViewer <- renderImage({
-    #   list(src = input$urlInput, contentType = "image/png")
-    # }, deleteFile = FALSE)
   } else if (file_extension == "bib") {
     renderUI({
       fileToDisplay <- getURL(fileURL)
