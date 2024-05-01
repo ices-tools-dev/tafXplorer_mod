@@ -150,11 +150,25 @@ mod_map_selector_server <- function(id) {
       selection = "single",
       filterable = TRUE,
       onClick = "select",
+      # defaultPageSize = 300,
+      highlight = TRUE,
+      striped = TRUE,
+
+      defaultColDef = colDef(
+        headerStyle = list(background = "#002b5f",
+        color = "#eff2f5")
+      ),
+      
       columns = list(
         "Repo Url" = reactable::colDef(
           html = TRUE,
           filterable = FALSE
         )
+      ),
+      theme = reactableTheme(
+        stripedColor = "#eff2f5",
+        highlightColor = "#faffb5",
+        cellPadding = "2px 2px"
       )
     )
   })
