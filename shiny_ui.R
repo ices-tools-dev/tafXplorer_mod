@@ -29,7 +29,8 @@ ui <- fluidPage(
     useShinyjs(),
     # introjsUI(),
     tags$script(src = "https://kit.fontawesome.com/ac71e9cf8e.js"),
-    tags$script(src = "detect_click2.js")
+    tags$script(src = "detect_click2.js"),
+    tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"))
   ),
   navbarPage(
     title = "tafXplorer",

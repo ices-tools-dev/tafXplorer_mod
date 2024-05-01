@@ -48,7 +48,7 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
   
   background-color: #C2DEFF
   */
-  background-color: #F47D4E
+  background-color: #d0dd28
   /*
   background-image: linear-gradient(#EBF4FF, #C2DEFF 60%, #99C9FF);/*#178acc */
   
@@ -64,7 +64,7 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
   /*
   background-color: #C2DEFF;
   */
-  background-color: #F47D4E
+  background-color: #d0dd28
 }
 
 .disabled {
@@ -143,7 +143,7 @@ input[type=radio] {
 }
 input[type=radio]:checked {
   /*border: 10px solid #f15d2a;*/
-  border: 10px solid #F15D22;
+  border: 10px solid #d0dd28;
   outline: unset !important /* I added this one for Edge (chromium) support */
 }
 
@@ -342,4 +342,11 @@ caption {
       }
     }
   }
+}
+
+
+
+.card-header {
+  background-color: #9dccff;
+  padding-bottom: 0%;
 }
