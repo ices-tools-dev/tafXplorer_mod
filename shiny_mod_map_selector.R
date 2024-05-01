@@ -1,9 +1,10 @@
 mod_map_selector_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    fluidPage(
-      column(
-        4,
+    page_fillable(
+    layout_columns(
+      card(
+        #4,
         leaflet::leafletOutput(ns("map_selector")),
         virtualSelectInput(
           inputId = ns("selected_locations"),
@@ -30,10 +31,12 @@ mod_map_selector_ui <- function(id) {
         )
       ),
       column(
-        8,
+        12,
          reactableOutput(ns("table"))
-      )
+      ),
+      col_widths = c(4,8)
     )
+  )
   )
 }
 

@@ -23,6 +23,21 @@ source("mod_map_selector.R")
 source("mod_file_tree.R")
 source("mod_file_viz.R")
 
+title_html <- tags$a(
+    href = "https://ices-taf.shinyapps.io/advicexplorer/",
+        tags$img(
+            src = "https://www.ices.dk/SiteCollectionImages/ICES%20logos/NEGATIVE%20ICES-logo.png",
+            style = "margin-top: -10px; padding-right:10px;padding-bottom:-10px",
+            height = "50px"
+        )
+)
+
+options(spinner.type = 5, 
+        spinner.color = "#d0dd28",
+        spinner.size = 0.7)
+
+
+
 # shiny user interface
 ui <- fluidPage(
   tags$head(
@@ -33,7 +48,7 @@ ui <- fluidPage(
     tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"))
   ),
   navbarPage(
-    title = "tafXplorer",
+    title = title_html,
     id = "tabset",
     selected = "Stock assessment selection",
     tabPanel(
