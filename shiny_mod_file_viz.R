@@ -40,7 +40,7 @@ mod_file_viz_server <- function(id, repos, file_tree, filenames) {
                     href = URLencode(tree()$ServerUrlString[i]),
                     target = "_blank"
                   )
-                )
+                )#, container = htmltools::h3, padding = "0px"
               ),
             card_body(
               getFileUI(tree()[i, ], ns)

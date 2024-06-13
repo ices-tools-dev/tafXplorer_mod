@@ -1,9 +1,10 @@
 mod_map_selector_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    fluidPage(
-      column(
-        4,
+    page_fillable(
+    layout_columns(
+      card(
+        #4,
         leaflet::leafletOutput(ns("map_selector")),
         virtualSelectInput(
           inputId = ns("selected_locations"),
@@ -30,10 +31,12 @@ mod_map_selector_ui <- function(id) {
         )
       ),
       column(
-        8,
+        12,
          reactableOutput(ns("table"))
-      )
+      ),
+      col_widths = c(4,8)
     )
+  )
   )
 }
 
@@ -147,11 +150,25 @@ mod_map_selector_server <- function(id) {
       selection = "single",
       filterable = TRUE,
       onClick = "select",
+      # defaultPageSize = 300,
+      highlight = TRUE,
+      striped = TRUE,
+
+      defaultColDef = colDef(
+        headerStyle = list(background = "#002b5f",
+        color = "#eff2f5")
+      ),
+      
       columns = list(
         "Repo Url" = reactable::colDef(
           html = TRUE,
           filterable = FALSE
         )
+      ),
+      theme = reactableTheme(
+        stripedColor = "#eff2f5",
+        highlightColor = "#faffb5",
+        cellPadding = "2px 2px"
       )
     )
   })
