@@ -28,17 +28,17 @@ tab_title <- function(name) {
 
 
 getListStockAssessments <- function() {
-  stocklist <- jsonlite::read_json("https://adminweb06.ices.dk/api/getListStockAssessments", simplifyVector = TRUE)
+  stocklist <- jsonlite::read_json("https://adminweb06.ices.dk/minapi/getListStockAssessments", simplifyVector = TRUE)
   return(stocklist)
 }
 
 getEGStatistics <- function() {
-  EGStats <- jsonlite::read_json("https://adminweb06.ices.dk/api/getEGStatistics", simplifyVector = TRUE)
+  EGStats <- jsonlite::read_json("https://adminweb06.ices.dk/minapi/getEGStatistics", simplifyVector = TRUE)
   return(EGStats)
 }
 
 getTAFStocksStatistics <- function() {
-  TAFStats <- jsonlite::read_json("https://adminweb06.ices.dk/api/getTAFStocksStatistics", simplifyVector = TRUE)
+  TAFStats <- jsonlite::read_json("https://adminweb06.ices.dk/minapi/getTAFStocksStatistics", simplifyVector = TRUE)
   return(TAFStats)
 }
 
@@ -72,7 +72,7 @@ CreateInteractiveTreeDF <- function(repo) {
   #   include.dirs = TRUE
   # )
 
-  paths <- jsonlite::read_json(paste0("https://adminweb06.ices.dk/api/dir/", repo), simplifyVector = TRUE)
+  paths <- jsonlite::read_json(paste0("https://adminweb06.ices.dk/minapi/dir/", repo), simplifyVector = TRUE)
 
   # to clean off initial path -  will not need this in production
   paths <- paths[!(grepl("/[.]git", paths) | grepl("(bootstrap|boot)/library", paths))]
@@ -84,7 +84,7 @@ CreateInteractiveTreeDF <- function(repo) {
   # output$filename <- paste0("`r shiny::icon('markdown')` ", output$filename)
 
   output$urlString <- paste0("https://ices-tools-dev.shinyapps.io/tafxplorer/?repo=", repo)
-  output$ServerUrlString <- paste0("https://adminweb06.ices.dk/api/blob/", output$pathString)
+  output$ServerUrlString <- paste0("https://adminweb06.ices.dk/minapi/blob/", output$pathString)
   # could be handy for file icons
   output$FileFormats <- tools::file_ext(output$filename)
 
