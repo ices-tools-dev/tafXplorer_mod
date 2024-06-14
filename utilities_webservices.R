@@ -147,14 +147,9 @@ getFileUI <- function(info, ns) {
         readOnly = TRUE
       )
     })
-  } else if (file_extension %in% c("r", "R", "Rmd")) {
+  } else if (file_extension %in% c("r", "R", "rmd")) {
     renderUI({
       fileToDisplay <- getURL(fileURL)
-      # print(fileToDisplay)
-      # html_text <- gsub("\r\n", "</br>", fileToDisplay)
-      # HTML(html_text)
-      # HTML(paste("<pre><code>", html_text, "</code></pre>"))
-
       aceEditor(
         outputId = ns("code"), ,
         value = fileToDisplay,
@@ -165,15 +160,7 @@ getFileUI <- function(info, ns) {
         readOnly = TRUE
       )
     })
-  } else if (file_extension == "md") {
-    renderUI({
-      fileToDisplay <- getURL(fileURL)
-      HTML(markdown::mark(fileToDisplay))
-      # print(fileToDisplay)
-      # html_text <- gsub("\r\n", "</br>", fileToDisplay)
-      # HTML(html_text)
-    })
-  } else if (file_extension == "html") {
+   } else if (file_extension == "html") {
     renderUI({
       fileToDisplay <- getURL(fileURL)
       HTML(fileToDisplay)
