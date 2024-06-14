@@ -19,6 +19,7 @@ source("utilities_webservices.R")
 load("data/map_data.RData", envir = .GlobalEnv)
 
 ######### Load modules ##############
+source("mod_login.R")
 source("mod_map_selector.R")
 source("mod_file_tree.R")
 source("mod_file_viz.R")
@@ -36,6 +37,9 @@ options(spinner.type = 5,
         spinner.color = "#d0dd28",
         spinner.size = 0.7)
 
+Logged = FALSE
+my_username <- "test"
+my_password <- "test"
 
 
 # shiny user interface
@@ -48,6 +52,8 @@ ui <- fluidPage(
     tags$link(rel = "stylesheet", type = "text/css", href = "css/gothic-a1.css"),
     tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"))
   ),
+
+  
   navbarPage(
     title = title_html,
     id = "tabset",

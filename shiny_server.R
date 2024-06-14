@@ -1,7 +1,7 @@
 # the app logic
 server <- function(input, output, session) {
   onload <- reactiveVal(TRUE)
-
+  
   # we take the first free slot
   nslots <- 3
   free_slots <- reactiveVal(paste(1:nslots))
@@ -146,7 +146,7 @@ server <- function(input, output, session) {
       filenames(c(filenames(), input$clicked_text))
     }
   })
-
+  mod_login_server("login_server_1")
   mod_map_selector_server("map_selector_1")
   mod_file_tree_server("file_tree_1", file_tree)
   mod_file_tree_server("file_tree_2", file_tree)

@@ -191,9 +191,23 @@ getFileUI <- function(info, ns) {
 
 
 
-# path <- "./Data/ices_cat_3_template"
-# repo <- "ices_cat_3_template"
-# CreateInteractiveTreeDF(repo)
-# CreateInteractiveTreeHTML(CreateInteractiveTreeDF(path, repo))
-
-# HTML(create_interactive_tree(path, repo))
+# Return the UI for a modal dialog with data selection input. If 'failed' 
+# is TRUE, then display a message that the previous value was invalid.
+dataModal <- function(failed = FALSE) {
+  modalDialog(
+    tags$script(HTML('
+                      $(document).keyup(function(event) {
+                        if ($("#password").is(":focus") && (event.keyCode == 13)) {
+                            $("#ok").click();
+                        }
+                      });
+                    ')),
+    tags$h2("Please enter your ICES credentials:"),
+    textInput("username", "Username:"),
+    passwordInput("password", "Password:"),
+    footer = tagList(
+      # modalButton("Cancel"),
+      actionButton("ok", "OK")
+    )
+  )
+}
