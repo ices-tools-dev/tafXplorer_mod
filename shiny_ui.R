@@ -11,6 +11,7 @@ library(wesanderson)
 library(shinyjs)
 library(bslib)
 library(RCurl)
+library(icesConnect)
 
 ########## Load utilities ############
 source("utilities_webservices.R")
@@ -37,9 +38,8 @@ options(spinner.type = 5,
         spinner.color = "#d0dd28",
         spinner.size = 0.7)
 
-Logged = FALSE
-my_username <- "test"
-my_password <- "test"
+
+
 
 
 # shiny user interface

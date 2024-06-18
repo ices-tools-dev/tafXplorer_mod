@@ -1,3 +1,6 @@
+Logged = FALSE
+token = ""
+
 # the app logic
 server <- function(input, output, session) {
   onload <- reactiveVal(TRUE)
@@ -161,20 +164,20 @@ server <- function(input, output, session) {
   # This `observe` is suspended only whith right user credential
   obs1 <- observe({
     showModal(dataModal())
+    print("here comes the:")
+    print(token)
   })
 
   # When OK button is pressed, attempt to authenticate. If successful,
   # remove the modal.
-  obs2 <- observe({
-    req(input$login)
+  obs2 <- observeEvent(input$login, {
     isolate({
       Username <- input$username
       Password <- input$password
     })
-    Id_username <- which(my_username == Username)
-    Id_password <- which(my_password == Password)
-    if (length(Id_username) > 0 & length(Id_password) > 0) {
-      if (Id_username == Id_password) {
+    token <<- ices_token(username = Username, password = Password)
+    
+    if (!is.empty(token)) {
         Logged <<- TRUE
         values$authenticated <- TRUE
         obs1$suspend()
@@ -183,10 +186,9 @@ server <- function(input, output, session) {
         values$authenticated <- FALSE
 				showModal(dataModal(failed = TRUE))
       }
-    }
   })
 
-
+  
   # Main modules
   mod_map_selector_server("map_selector_1")
   mod_file_tree_server("file_tree_1", file_tree)
