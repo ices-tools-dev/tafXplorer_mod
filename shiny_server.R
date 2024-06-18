@@ -1,7 +1,8 @@
 # the app logic
 server <- function(input, output, session) {
   onload <- reactiveVal(TRUE)
-  
+
+
   # we take the first free slot
   nslots <- 3
   free_slots <- reactiveVal(paste(1:nslots))
@@ -100,17 +101,19 @@ server <- function(input, output, session) {
     ignoreInit = TRUE
   )
 
-  observeEvent(input$remove_tab, {
-    removeTab(inputId = "tabset", target = paste(tab_title(input$remove_tab)))
-    slot_to_free <- names(which(unlist(reactiveValuesToList(repos)) == input$remove_tab))
+  observeEvent(input$remove_tab,
+    {
+      removeTab(inputId = "tabset", target = paste(tab_title(input$remove_tab)))
+      slot_to_free <- names(which(unlist(reactiveValuesToList(repos)) == input$remove_tab))
 
-    repos[[slot_to_free]] <- NULL
-    file_tree[[slot_to_free]] <- NULL
-    filenames(filenames()[!grepl(slot_to_free, filenames())])
+      repos[[slot_to_free]] <- NULL
+      file_tree[[slot_to_free]] <- NULL
+      filenames(filenames()[!grepl(slot_to_free, filenames())])
 
-    free_slots(c(free_slots(), gsub("file_tree_", "", slot_to_free)))
-
-  }, ignoreInit = TRUE)
+      free_slots(c(free_slots(), gsub("file_tree_", "", slot_to_free)))
+    },
+    ignoreInit = TRUE
+  )
 
 
   # these only run after initialisation
@@ -146,7 +149,45 @@ server <- function(input, output, session) {
       filenames(c(filenames(), input$clicked_text))
     }
   })
-  mod_login_server("login_server_1")
+  # # values <- reactiveValues(authenticated = FALSE)
+  # # print(Logged)
+  # mod_login_server("login_server_1")
+  # # if (Logged) {
+
+
+  values <- reactiveValues(authenticated = FALSE)
+
+  # Show modal when button is clicked.
+  # This `observe` is suspended only whith right user credential
+  obs1 <- observe({
+    showModal(dataModal())
+  })
+
+  # When OK button is pressed, attempt to authenticate. If successful,
+  # remove the modal.
+  obs2 <- observe({
+    req(input$login)
+    isolate({
+      Username <- input$username
+      Password <- input$password
+    })
+    Id_username <- which(my_username == Username)
+    Id_password <- which(my_password == Password)
+    if (length(Id_username) > 0 & length(Id_password) > 0) {
+      if (Id_username == Id_password) {
+        Logged <<- TRUE
+        values$authenticated <- TRUE
+        obs1$suspend()
+        removeModal()
+      } else {
+        values$authenticated <- FALSE
+				showModal(dataModal(failed = TRUE))
+      }
+    }
+  })
+
+
+  # Main modules
   mod_map_selector_server("map_selector_1")
   mod_file_tree_server("file_tree_1", file_tree)
   mod_file_tree_server("file_tree_2", file_tree)
@@ -155,4 +196,5 @@ server <- function(input, output, session) {
   mod_file_viz_server("file_viz_1", repos, file_tree, filenames)
   mod_file_viz_server("file_viz_2", repos, file_tree, filenames)
   mod_file_viz_server("file_viz_3", repos, file_tree, filenames)
+  # }
 }
