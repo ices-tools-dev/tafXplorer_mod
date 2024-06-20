@@ -22,7 +22,24 @@ tab_title <- function(name) {
   )
 }
 
-
+# Function to perform a GET request with JSON web tokens
+performGetRequestWithJWT <- function(url, token) {
+  # Create the HTTP header with the token
+  headers <- c(Authorization = paste("Bearer", token))
+ 
+  # Perform the GET request
+  response <- httr::GET(url, httr::add_headers(headers))
+ 
+  # Check if the request was successful
+  if (httr::http_status(response)$category == "Success") {
+    # Return the response content
+    return(httr::content(response))
+  } else {
+    # Return an error message
+    return(paste("GET request failed with status code", httr::http_status(response)$status_code))
+  }
+}
+ 
 
 
 

@@ -5,6 +5,8 @@ mod_map_selector_ui <- function(id) {
     layout_columns(
       card(
         #4,
+        tags$style(type = "text/css", "#logo {height: auto !important; margin-top: 10px;  padding-bottom: 10px; }"),
+        tags$img(id = "logo", src = "TAFXplorer white.png"),
         leaflet::leafletOutput(ns("map_selector")),
         virtualSelectInput(
           inputId = ns("selected_locations"),
@@ -152,7 +154,7 @@ mod_map_selector_server <- function(id) {
           selection = "single",
           filterable = TRUE,
           onClick = "select",
-          # defaultPageSize = 300,
+          defaultPageSize = 30,
           highlight = TRUE,
           striped = TRUE,
           defaultColDef = colDef(
