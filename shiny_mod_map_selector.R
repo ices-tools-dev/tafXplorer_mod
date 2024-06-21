@@ -157,8 +157,8 @@ mod_map_selector_server <- function(id) {
           striped = TRUE,
           defaultColDef = colDef(
             headerStyle = list(
-              background = "#002b5f",
-              color = "#eff2f5"
+              background = "#CCF1ED",
+              color = "#002B5F"
             )
           ),
           columns = list(
@@ -168,8 +168,8 @@ mod_map_selector_server <- function(id) {
             )
           ),
           theme = reactableTheme(
-            stripedColor = "#eff2f5",
-            highlightColor = "#faffb5",
+            stripedColor = "#E6E7E8",
+            highlightColor = "#00B7A31A",
             cellPadding = "2px 2px"
           )
         )

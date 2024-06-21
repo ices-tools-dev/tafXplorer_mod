@@ -29,6 +29,10 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
     outline-color: #7e7e7e;
     }
 
+.map_selector_1-selected_locations-label {
+  color: #002B5F;
+}
+
 #tbl {outline:#dddddd solid 1px;}
 
 .navbar-default {
@@ -37,28 +41,27 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
   background-image: linear-gradient(#00438fd2, #002B5F 60%, #002552); /*linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5);*/
   background-repeat: no-repeat;
   box-shadow: 0 1px 10px rgb(0 0 0 / 10%);
-  --bs-navbar-padding-y: .2rem;
+  /*--bs-navbar-padding-y: .2rem;*/
   font-size: 18px;
+  position: fixed;
+  top: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  margin-bottom: 10px;
   
 }
 
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
-  color: #000000;
-  
+  color: #000000; 
+  background-color: #00B7A3;
   /*
-  background-color: #F15D2A;
-  
-  opacity: .9;
-  
-  background-color: #C2DEFF
-  */
-  background-color: #d0dd28;
   margin-top: -2px;
   padding-bottom: calc(0.5rem + 2px)
-  /*
-  background-image: linear-gradient(#EBF4FF, #C2DEFF 60%, #99C9FF);/*#178acc */
-  
+  */
+  margin-top: -7px;
+  padding-bottom: 7px;
 }
 
 .navbar-default .navbar-nav>li>a {
@@ -70,14 +73,10 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
 
 
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus {
-  color: #000000;
-  
-  /*
-  background-color: #C2DEFF;
-  */
-  background-color: #d0dd28;
-  margin-top: -2px;
-  padding-bottom: calc(0.5rem + 2px)
+  color: #000000; 
+  background-color: #00B7A3;
+  margin-top: -7px;
+  padding-bottom: 7px;
   
 }
 
@@ -94,6 +93,10 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
   font-size: 18px;
 }
 
+.html-fill-container>.html-fill-item.bslib-mb-spacing {
+  margin-bottom: 20px;
+  margin-top: 40px;
+}
 
 .navbar-default .navbar-nav>li>a:hover {
   color: #cecece;
@@ -129,9 +132,9 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
 
 .btn-default {
   color: #ffffff;
-  background-image: linear-gradient(#b6cc54, #aec640 60%, #b6cc54); /*linear-gradient(#f69371, #F15D2A 50%, #f69371)   #bad5ce, #9AC2B7 50%, #bad5ce*/
+  background-image: linear-gradient(#009e8c, #00B7A3 60%, #00d1ba); /*linear-gradient(#f69371, #F15D2A 50%, #f69371)   #bad5ce, #9AC2B7 50%, #bad5ce*/
   background-repeat: no-repeat;
-  background-color: #aec640;
+  background-color: #017c6e;
   border-color: rgba(0,0,0,0.1);
   border-bottom: 1px solid #e6e6e6;
 }
@@ -158,7 +161,7 @@ input[type=radio] {
 }
 input[type=radio]:checked {
   /*border: 10px solid #f15d2a;*/
-  border: 10px solid #d0dd28;
+  border: 10px solid #00B7A3;
   outline: unset !important /* I added this one for Edge (chromium) support */
 }
 
@@ -194,6 +197,9 @@ input[type=radio]:checked {
   visibility: visible;
 }
 
+.Reactable, .ReactTable {
+  margin-top: 40px;
+}
 .dataTables_wrapper {
   position: relative;
   clear: both;
@@ -362,11 +368,11 @@ caption {
 
 
 .card-header {
-  background-color: #9dccff;
+  background-color: #CCF1ED;
   padding-bottom: 0%;
 }
 
 .card-body {
   color: #b0b0b0;
-  background-color: #002b5f;
+  background-color: #E6E7E8;
 }
