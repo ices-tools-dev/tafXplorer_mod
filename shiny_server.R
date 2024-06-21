@@ -1,10 +1,10 @@
-Logged = FALSE
-token = ""
 
 # the app logic
 server <- function(input, output, session) {
   onload <- reactiveVal(TRUE)
 
+  # log in values
+  token <- reactiveVal("")
 
   # we take the first free slot
   nslots <- 3
@@ -144,6 +144,8 @@ server <- function(input, output, session) {
     print(unlist(reactiveValuesToList(repos)))
     print(filenames())
     print(input$clicked_text)
+    print("here comes the token:")
+    print(token())
     print("=============")
   })
 
@@ -152,10 +154,6 @@ server <- function(input, output, session) {
       filenames(c(filenames(), input$clicked_text))
     }
   })
-  # # values <- reactiveValues(authenticated = FALSE)
-  # # print(Logged)
-  # mod_login_server("login_server_1")
-  # # if (Logged) {
 
 
   values <- reactiveValues(authenticated = FALSE)
@@ -164,8 +162,6 @@ server <- function(input, output, session) {
   # This `observe` is suspended only whith right user credential
   obs1 <- observe({
     showModal(dataModal())
-    print("here comes the:")
-    print(token)
   })
 
   # When OK button is pressed, attempt to authenticate. If successful,
@@ -175,20 +171,20 @@ server <- function(input, output, session) {
       Username <- input$username
       Password <- input$password
     })
-    token <<- ices_token(username = Username, password = Password)
-    
-    if (!is.empty(token)) {
-        Logged <<- TRUE
+    jwt <- ices_token(username = Username, password = Password)
+    token(jwt)
+
+    if (!is.empty(token())) {
         values$authenticated <- TRUE
         obs1$suspend()
         removeModal()
       } else {
         values$authenticated <- FALSE
-				showModal(dataModal(failed = TRUE))
+        showModal(dataModal(failed = TRUE))
       }
   })
 
-  
+
   # Main modules
   mod_map_selector_server("map_selector_1")
   mod_file_tree_server("file_tree_1", file_tree)
