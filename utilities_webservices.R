@@ -23,13 +23,13 @@ tab_title <- function(name) {
 }
 
 # Function to perform a GET request with JSON web tokens
-performGetRequestWithJWT <- function(url, token) {
+get_with_token <- function(url, token) {
   # Create the HTTP header with the token
   headers <- c(Authorization = paste("Bearer", token))
- 
+
   # Perform the GET request
   response <- httr::GET(url, httr::add_headers(headers))
- 
+
   # Check if the request was successful
   if (httr::http_status(response)$category == "Success") {
     # Return the response content
@@ -39,7 +39,7 @@ performGetRequestWithJWT <- function(url, token) {
     return(paste("GET request failed with status code", httr::http_status(response)$status_code))
   }
 }
- 
+
 
 
 
@@ -208,7 +208,7 @@ getFileUI <- function(info, ns) {
 
 
 
-# Return the UI for a modal dialog with data selection input. If 'failed' 
+# Return the UI for a modal dialog with data selection input. If 'failed'
 # is TRUE, then display a message that the previous value was invalid.
 dataModal <- function(failed = FALSE) {
   modalDialog(
@@ -225,7 +225,7 @@ dataModal <- function(failed = FALSE) {
 
     if (failed)
           div(tags$h5("Invalid username or password", style = "color: red;")),
-          
+
 
     footer = tagList(
       # modalButton("Cancel"),

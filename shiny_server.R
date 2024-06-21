@@ -5,6 +5,7 @@ server <- function(input, output, session) {
 
   # log in values
   token <- reactiveVal("")
+  user <- reactiveVal(list())
 
   # we take the first free slot
   nslots <- 3
@@ -146,6 +147,8 @@ server <- function(input, output, session) {
     print(input$clicked_text)
     print("here comes the token:")
     print(token())
+    print("here comes the user:")
+    print(user())
     print("=============")
   })
 
@@ -176,6 +179,8 @@ server <- function(input, output, session) {
 
     if (!is.empty(token())) {
         values$authenticated <- TRUE
+        userinfo <- get_with_token("https://taf.ices.dk/api/User", token())
+        user(userinfo)
         obs1$suspend()
         removeModal()
       } else {
