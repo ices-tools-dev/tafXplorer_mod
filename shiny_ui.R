@@ -55,6 +55,8 @@ ui <- fluidPage(
 
   
   navbarPage(
+    collapsible = TRUE,
+    fluid = TRUE,
     title = title_html,
     id = "tabset",
     selected = "Stock assessment selection",
