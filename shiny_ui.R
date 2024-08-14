@@ -11,6 +11,7 @@ library(wesanderson)
 library(shinyjs)
 library(bslib)
 library(RCurl)
+library(icesConnect)
 
 ########## Load utilities ############
 source("utilities_webservices.R")
@@ -19,6 +20,7 @@ source("utilities_webservices.R")
 load("data/map_data.RData", envir = .GlobalEnv)
 
 ######### Load modules ##############
+source("mod_login.R")
 source("mod_map_selector.R")
 source("mod_file_tree.R")
 source("mod_file_viz.R")
@@ -38,6 +40,8 @@ options(spinner.type = 5,
 
 
 
+
+
 # shiny user interface
 ui <- fluidPage(
   tags$head(
@@ -48,6 +52,8 @@ ui <- fluidPage(
     tags$link(rel = "stylesheet", type = "text/css", href = "css/gothic-a1.css"),
     tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"))
   ),
+
+  
   navbarPage(
     title = title_html,
     id = "tabset",

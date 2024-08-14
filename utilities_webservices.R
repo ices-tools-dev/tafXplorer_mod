@@ -22,6 +22,23 @@ tab_title <- function(name) {
   )
 }
 
+# Function to perform a GET request with JSON web tokens
+get_with_token <- function(url, token) {
+  # Create the HTTP header with the token
+  headers <- c(Authorization = paste("Bearer", token))
+
+  # Perform the GET request
+  response <- httr::GET(url, httr::add_headers(headers))
+
+  # Check if the request was successful
+  if (httr::http_status(response)$category == "Success") {
+    # Return the response content
+    return(httr::content(response))
+  } else {
+    # Return an error message
+    return(paste("GET request failed with status code", httr::http_status(response)$status_code))
+  }
+}
 
 
 
@@ -191,9 +208,88 @@ getFileUI <- function(info, ns) {
 
 
 
-# path <- "./Data/ices_cat_3_template"
-# repo <- "ices_cat_3_template"
-# CreateInteractiveTreeDF(repo)
-# CreateInteractiveTreeHTML(CreateInteractiveTreeDF(path, repo))
+# Return the UI for a modal dialog with data selection input. If 'failed'
+# is TRUE, then display a message that the previous value was invalid.
+dataModal <- function(failed = FALSE) {
+  modalDialog(
+    tags$script(HTML('
+                      $(document).keyup(function(event) {
+                        if ($("#password").is(":focus") && (event.keyCode == 13)) {
+                            $("#login").click();
+                        }
+                      });
+                    ')),
+    tags$h3("Please enter your ICES credentials:"),
+    textInput("username", "Username:", placeholder = "Your ICES username"),
+    passwordInput("password", "Password:", placeholder = "Your ICES password"),
 
-# HTML(create_interactive_tree(path, repo))
+    if (failed)
+          div(tags$h5("Invalid username or password", style = "color: red;")),
+
+
+    footer = tagList(
+      # modalButton("Cancel"),
+      actionButton("login", "Login")
+    )
+  )
+}
+
+
+
+# shinyApp(
+#   ui = basicPage(
+#     actionButton("show", "Show modal dialog"),
+#     verbatimTextOutput("dataInfo")
+#   ),
+
+#   server = function(input, output) {
+#     # reactiveValues object for storing current data set.
+#     vals <- reactiveValues(data = NULL)
+
+#     # Return the UI for a modal dialog with data selection input. If 'failed' is
+#     # TRUE, then display a message that the previous value was invalid.
+#     dataModal <- function(failed = FALSE) {
+#       modalDialog(
+#         textInput("dataset", "Choose data set",
+#           placeholder = 'Try "mtcars" or "abc"'
+#         ),
+#         span('(Try the name of a valid data object like "mtcars", ',
+#              'then a name of a non-existent object like "abc")'),
+#         if (failed)
+#           div(tags$b("Invalid name of data object", style = "color: red;")),
+
+#         footer = tagList(
+#           modalButton("Cancel"),
+#           actionButton("ok", "OK")
+#         )
+#       )
+#     }
+
+#     # Show modal when button is clicked.
+#     observeEvent(input$show, {
+#       showModal(dataModal())
+#     })
+
+#     # When OK button is pressed, attempt to load the data set. If successful,
+#     # remove the modal. If not show another modal, but this time with a failure
+#     # message.
+#     observeEvent(input$ok, {
+#       # Check that data object exists and is data frame.
+#       if (!is.null(input$dataset) && nzchar(input$dataset) &&
+#           exists(input$dataset) && is.data.frame(get(input$dataset))) {
+#         vals$data <- get(input$dataset)
+#         removeModal()
+#       } else {
+#         showModal(dataModal(failed = TRUE))
+#       }
+#     })
+
+#     # Display information about selected data
+#     output$dataInfo <- renderPrint({
+#       if (is.null(vals$data))
+#         "No data selected"
+#       else
+#         summary(vals$data)
+#     })
+#   }
+# )
