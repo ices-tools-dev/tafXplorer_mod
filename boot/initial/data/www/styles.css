@@ -99,7 +99,7 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
 }
 
 .bslib-grid>*{
-  margin-top: -50px;
+  margin-top: -60px;
 }
 /* .main, .bslib-gap-spacing, .html-fill-container{
   margin-top: 20px;
@@ -141,8 +141,8 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
 #logo {
   height: auto;
   width: 70% !important;
-  margin-top: 40px;
-  margin-bottom: -70px
+  margin-top: 10px;
+  margin-bottom: -65px;
 }
 
 .panel-title {
