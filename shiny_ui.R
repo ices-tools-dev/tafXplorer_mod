@@ -35,7 +35,7 @@ title_html <- tags$a(
 )
 
 options(spinner.type = 5, 
-        spinner.color = "#d0dd28",
+        spinner.color = "#00B7A3",
         spinner.size = 0.7)
 
 

@@ -54,14 +54,14 @@ map <-
     data = eu_shape,
     color = "black",
     weight = 1,
-    fillOpacity = 0.4,
-    fillColor = "#99aabf", # "#E8EAEA"
+    fillOpacity = 0.9,
+    fillColor = "#CCF1ED", # "#E8EAEA"
     group = "Europe"
   ) %>%
   addPolygons(
     data = eco_shape,
-    fillColor = "#e6e7e8",
-    fillOpacity = 0.08,
+    fillColor = "#E6E7E8",
+    fillOpacity = 0.9,
     color = "black",
     stroke = TRUE,
     weight = 1,
@@ -71,7 +71,7 @@ map <-
   ) %>%
   addPolygons(
     data = eco_shape,
-    fillColor = "#d0dd28",
+    fillColor = "#00B7A3",
     fillOpacity = 0.7,
     weight = 1,
     color = "black",
