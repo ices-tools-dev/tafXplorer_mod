@@ -43,7 +43,7 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
   box-shadow: 0 1px 10px rgb(0 0 0 / 10%);
   /*--bs-navbar-padding-y: .2rem;*/
   font-size: 18px;
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   padding: 0;
   margin: 0;
@@ -97,12 +97,25 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
   margin-bottom: 20px;
   margin-top: 40px;
 }
-
+/* .main, .bslib-gap-spacing, .html-fill-container{
+  margin-top: 20px;
+} */
+/* .bslib-sidebar-5766{
+  margin-top: 40px;
+}
+.bslib-sidebar-8778 {
+  margin-top: 40px;
+} */
 .navbar-default .navbar-nav>li>a:hover {
   color: #cecece;
   background-color: transparent;
 }
-
+.bslib-sidebar-layout, .bslib-mb-spacing, .html-fill-item {
+  --_sidebar-width: 40%;
+  --_js-toggle-count-this-side: 0;
+  --_js-toggle-count-max-side: 1;
+  margin-top: 50px;
+}
 .panel-primary {
   border-color: #ffffff;
 }
@@ -197,9 +210,9 @@ input[type=radio]:checked {
   visibility: visible;
 }
 
-.Reactable, .ReactTable {
+/* .Reactable, .ReactTable {
   margin-top: 40px;
-}
+} */
 .dataTables_wrapper {
   position: relative;
   clear: both;
