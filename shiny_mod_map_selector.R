@@ -4,8 +4,6 @@ mod_map_selector_ui <- function(id) {
     page_fillable(
     layout_columns(
       card(
-        #4,
-        # tags$style(type = "text/css", "#logo {height: auto !important; margin-top: 10px;  padding-bottom: 10px; }"),
         tags$img(id = "logo", src = "TAFXplorer blue.png"),
         leaflet::leafletOutput(ns("map_selector")),
         virtualSelectInput(
