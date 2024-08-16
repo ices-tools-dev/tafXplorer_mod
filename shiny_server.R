@@ -174,11 +174,10 @@ server <- function(input, output, session) {
       Username <- input$username
       Password <- input$password
     })
-    browser()
-    jwt <- ices_token(username = Username, password = Password)
+    jwt <- ices_token(username = Username, password = Password, refresh = TRUE)
     token(jwt)
 
-    if (!is.empty(token())) {
+    if (!is.empty(token())) {        
         values$authenticated <- TRUE
         userinfo <- get_with_token("https://taf.ices.dk/api/User", token())
         user(userinfo)
@@ -189,7 +188,6 @@ server <- function(input, output, session) {
         showModal(dataModal(failed = TRUE))
       }
   })
-
 
 
   # Main modules
