@@ -518,3 +518,125 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
+
+library(shiny)
+
+ui <- fluidPage(
+    shinyjs::useShinyjs(),#this line NEEDS to be somewhere in the ui!
+    navbarPage(
+        title = HTML("<b><u>Title</u></b>"),
+        id = 'banner'
+    )
+)
+
+server <- function(input, output) {
+    
+    shinyjs::addClass(id = "banner", class = "navbar-right")#moves navbar right
+    #this next line is the one APPENDING text to the navbar, thanks to "add = TRUE"
+    shinyjs::html(id = "banner", html = "<p>companyName</p><p>company@place.com</p>", add = TRUE)
+
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
+
+
+library(shiny)
+library(bslib)
+library(fontawesome)
+
+ui <- fluidPage(
+  theme = bs_theme(),  # Use the default Bootstrap theme
+  
+  # Login UI
+  uiOutput("login_ui"),
+  
+  # Placeholder for the logged-in user information (icon and name)
+  tags$div(
+    uiOutput("user_info_ui"),
+    style = "position: absolute; top: 10px; right: 20px; z-index: 1000;"
+  ),
+  
+  # Main content (e.g., a navbar)
+  navbarPage(
+    title = "Navbar Example",
+    id = "main_navbar",
+    
+    # Tab 1
+    tabPanel("Home",
+      fluidPage(
+        sidebarLayout(
+          sidebarPanel(
+            actionButton("some_action", "Some Action")
+          ),
+          mainPanel(
+            h3("This is the Home tab")
+          )
+        )
+      )
+    ),
+    
+    # Tab 2
+    tabPanel("Another Tab",
+      fluidPage(
+        h3("This is another tab")
+      )
+    )
+  ),
+  
+  # Toggle switch UI (appears after login)
+  uiOutput("toggle_ui")
+)
+server <- function(input, output, session) {
+  
+  # Reactive value to track if the user is logged in
+  logged_in <- reactiveVal(FALSE)
+  
+  # Reactive value to store the username
+  user_name <- reactiveVal("")
+  
+  # Render the login UI
+  output$login_ui <- renderUI({
+    if (!logged_in()) {
+      tagList(
+        textInput("username", "Username"),
+        passwordInput("password", "Password"),
+        actionButton("login_button", "Log in")
+      )
+    }
+  })
+  
+  # Check login credentials
+  observeEvent(input$login_button, {
+    if (input$username == "user" && input$password == "password") {
+      logged_in(TRUE)
+      user_name(input$username)  # Store the username
+    } else {
+      showNotification("Invalid credentials", type = "error")
+    }
+  })
+  
+  # Render the user info UI if the user is logged in
+  output$user_info_ui <- renderUI({
+    if (logged_in()) {
+      tags$div(
+        icon("user-check", class = "fa-2x"),  # Logged-in icon
+        tags$span(style = "margin-left: 10px;", paste("Logged in as:", user_name())),
+        style = "display: flex; align-items: center;"
+      )
+    }
+  })
+  
+  # Render the toggle UI if the user is logged in
+  output$toggle_ui <- renderUI({
+    if (logged_in()) {
+      tags$div(
+        style = "margin-top: 10px;",
+        checkboxInput("toggle", "Toggle Switch", value = FALSE)
+      )
+    }
+  })
+}
+
+shinyApp(ui, server)

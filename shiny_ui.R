@@ -26,7 +26,7 @@ source("mod_file_tree.R")
 source("mod_file_viz.R")
 
 title_html <- tags$a(
-    href = "https://ices-taf.shinyapps.io/tafxplorer/",
+    href = "https://ices-tools-dev.shinyapps.io/TAFXplorer/",
         tags$img(
         src = "negative_ices_logo.png",
         style = "margin-top: 0px; margin-bottom: 0px; padding-right:10px;",
