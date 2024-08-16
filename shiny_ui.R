@@ -28,10 +28,10 @@ source("mod_file_viz.R")
 title_html <- tags$a(
     href = "https://ices-taf.shinyapps.io/tafxplorer/",
         tags$img(
-            src = "https://www.ices.dk/SiteCollectionImages/ICES%20logos/NEGATIVE%20ICES-logo.png",
-            style = "margin-top: -5px; padding-right:10px;padding-bottom:-10px",
-            height = "50px"
-        )
+        src = "negative_ices_logo.png",
+        style = "margin-top: 0px; margin-bottom: 0px; padding-right:10px;",
+        height = "50px"
+      )
 )
 
 options(spinner.type = 5, 
@@ -52,6 +52,7 @@ ui <- fluidPage(
     tags$link(rel = "stylesheet", type = "text/css", href = "css/gothic-a1.css"),
     tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"))
   ),
+  
 
   
   navbarPage(
@@ -62,6 +63,10 @@ ui <- fluidPage(
     selected = "Stock assessment selection",
     tabPanel(
       "Stock assessment selection",
+      tags$div(
+        uiOutput("user_info_ui"),
+        style = "position: absolute; top: 50px; right: 20px; z-index: 1000;"
+      ),
       mod_map_selector_ui("map_selector_1")
     )
   )
