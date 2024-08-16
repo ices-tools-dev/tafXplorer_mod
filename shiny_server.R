@@ -174,6 +174,7 @@ server <- function(input, output, session) {
       Username <- input$username
       Password <- input$password
     })
+    browser()
     jwt <- ices_token(username = Username, password = Password)
     token(jwt)
 
@@ -188,6 +189,7 @@ server <- function(input, output, session) {
         showModal(dataModal(failed = TRUE))
       }
   })
+
 
 
   # Main modules
