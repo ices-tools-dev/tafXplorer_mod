@@ -174,7 +174,7 @@ server <- function(input, output, session) {
       Username <- input$username
       Password <- input$password
     })
-    jwt <- ices_token(username = Username, password = Password)
+    jwt <- ices_token(username = Username, password = Password, refresh = TRUE)
     token(jwt)
 
     if (!is.empty(token())) {
