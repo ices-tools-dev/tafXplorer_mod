@@ -9,7 +9,7 @@ mod_login_server <- function(id) {
         ns <- session$ns
         
         values <- reactiveValues(authenticated = FALSE)
-        print(values)
+        
         obs1 <- observe({
             showModal(dataModal())
         })

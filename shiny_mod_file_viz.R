@@ -1,7 +1,8 @@
 mod_file_viz_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    uiOutput(outputId = ns("file_viz"))
+    # uiOutput(outputId = ns("file_viz"))
+    div(id = ns("card_container"))
   )
 }
 
@@ -20,34 +21,63 @@ mod_file_viz_server <- function(id, repos, file_tree, filenames) {
 
     files <- reactive({
       files <- grep(file_tree_id, filenames(), value = TRUE)
+      browser()
       as.integer(gsub(paste0(file_tree_id, "-"), "", files))
     })
 
     observe({
       print(paste(repos[[file_tree_id]], ":", paste(tree()$filename[files()], collapse = ", ")))
     })
-
-    output$file_viz <- renderUI({
+    
+    observe({
       lapply(
-        rev(files()),
+        rev(files()), 
         function(i) {
-          card(
-            card_header(
-                tags$span(
+        # Observe events to open cards
+        # observeEvent(input[[paste0("open_card", i)]], {
+          insertUI(
+            selector = paste0("#", ns("card_container")),
+            ui = create_card(
+              cardId = paste0("card", i),
+              title = #tags$span(
                   "File: ",
                   tags$a(
                     tree()$filename[i],
                     href = URLencode(tree()$ServerUrlString[i]),
                     target = "_blank"
-                  )
-                )
-              ),
-            card_body(
-              getFileUI(tree()[i, ], ns)
+                  #)
+                ), 
+              body = getFileUI(tree()[i, ], ns) 
+              # footer = card$footer
             )
           )
-        }
-      )
+        # })
+        
+        # Observe events to close cards (this does not work)
+        observeEvent(input[[paste0("close_","card", i)]], {          
+          removeUI(selector = paste0("#", ns(paste0("card", i))))
+        })
+      })
     })
+    # output$file_viz <- renderUI({
+      
+    #   lapply(
+    #     rev(files()),
+    #     function(i) {
+    #       create_card(
+    #           id = paste0("card", i),
+    #           title = tags$span(
+    #               "File: ",
+    #               tags$a(
+    #                 tree()$filename[i],
+    #                 href = URLencode(tree()$ServerUrlString[i]),
+    #                 target = "_blank"
+    #               )
+    #             ), 
+    #           body = getFileUI(tree()[i, ], ns) 
+    #           # footer = card$footer
+    #         )
+    # })
+    # })
   })
 }

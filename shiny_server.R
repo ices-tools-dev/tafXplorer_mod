@@ -137,18 +137,20 @@ server <- function(input, output, session) {
   )
 
   observe({
-    print("---changes---")
-    print(free_slots())
-    print(input$tabset)
-    print(session$clientData$url_search)
-    print(paste("on load", onload()))
-    print(unlist(reactiveValuesToList(repos)))
+    # print("---changes---")
+    # print(free_slots())
+    # print(input$tabset)
+    # print(session$clientData$url_search)
+    # print(paste("on load", onload()))
+    # print(unlist(reactiveValuesToList(repos)))
+    print("filenames:")
     print(filenames())
+    print("clicked text:")
     print(input$clicked_text)
-    print("here comes the token:")
-    print(token())
-    print("here comes the user:")
-    print(user())
+    # print("here comes the token:")
+    # print(token())
+    # print("here comes the user:")
+    # print(user())
     print("=============")
   })
 
@@ -189,6 +191,11 @@ server <- function(input, output, session) {
       }
   })
 
+  # Observe events to close cards (this works only for a specific file
+  #2019_ank.27.78abd_assessment : DATA.bib)
+        observeEvent(input[[paste0("close_","card", 8)]], {          
+          removeUI(selector = paste0("#card", 8))
+        })
 
   # Main modules
   mod_map_selector_server("map_selector_1")

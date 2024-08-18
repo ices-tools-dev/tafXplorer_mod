@@ -104,7 +104,7 @@ CreateInteractiveTreeDF <- function(repo) {
   output$ServerUrlString <- paste0("https://adminweb06.ices.dk/minapi/blob/", output$pathString)
   # could be handy for file icons
   output$FileFormats <- tools::file_ext(output$filename)
-
+  
   return(output)
 }
 
@@ -234,22 +234,22 @@ dataModal <- function(failed = FALSE) {
   )
 }
 
-create_card <- function(id, title, body, footer) {
+create_card <- function(cardId, title, body, footer) {
     card(
-      id = id,
+      id = cardId,
       card_header(
         title = title,
         tagList(
           span(title),
           actionButton(
-            inputId = paste0("close_", id),
+            inputId = paste0("close_", cardId),
             label = NULL,
             icon = icon("times"),
             class = "btn-close-card"
           )
         )
       ),
-      card_body(body),
-      card_footer(footer)
+      card_body(body)
+      # card_footer(footer)
     )
   }
