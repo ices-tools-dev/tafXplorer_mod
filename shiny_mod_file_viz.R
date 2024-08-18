@@ -37,7 +37,7 @@ mod_file_viz_server <- function(id, repos, file_tree, filenames) {
                   "File: ",
                   tags$a(
                     tree()$filename[i],
-                    href = URLencode(tree()$ServerUrlString[i]),
+                    href = URLencode(paste0(tree()$ServerUrlString[i],"?download=true")),
                     target = "_blank"
                   )
                 )#, container = htmltools::h3, padding = "0px"
