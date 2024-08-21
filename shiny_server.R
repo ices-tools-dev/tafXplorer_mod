@@ -189,6 +189,18 @@ server <- function(input, output, session) {
       }
   })
 
+  # Render the user info UI if the user is logged in
+  output$user_info_ui <- renderUI({
+    if (!is.empty(token())) {
+      tags$div(
+        style = "margin-top: 5px;",
+        icon("user-check", class = "fa-2x", style = "font-size: 15px;"),  # Logged-in icon
+        tags$span(style = "margin-left: 5px;", user()$username)
+      )
+    }
+  })
+  
+
 
   # Main modules
   mod_map_selector_server("map_selector_1")
