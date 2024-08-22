@@ -46,7 +46,6 @@ options(spinner.type = 5,
 ui <- fluidPage(
   tags$head(
     useShinyjs(),
-    # introjsUI(),
     tags$script(src = "https://kit.fontawesome.com/ac71e9cf8e.js"),
     tags$script(src = "detect_click2.js"),
     tags$link(rel = "stylesheet", type = "text/css", href = "css/gothic-a1.css"),

@@ -13,7 +13,7 @@ server <- function(input, output, session) {
   file_tree <- reactiveValues()
   repos <- reactiveValues()
   filenames <- reactiveVal(character(0))
-
+  
   # observe first url
   observeEvent(session$clientData$url_search,
     {
@@ -139,18 +139,22 @@ server <- function(input, output, session) {
   observe({
     print("---changes---")
     print(free_slots())
+    print("input$tabset")
     print(input$tabset)
     print(session$clientData$url_search)
     print(paste("on load", onload()))
     print(unlist(reactiveValuesToList(repos)))
     print(filenames())
-    print(input$clicked_text)
-    print("here comes the token:")
-    print(token())
-    print("here comes the user:")
-    print(user())
+    # print(input$clicked_text)
+    # print("here comes the token:")
+    # print(token())
+    # print("here comes the user:")
+    # print(user())
     print("=============")
-  })
+    print("input$remove_tab")
+    print(input$remove_tab)
+    })
+  
 
   observeEvent(input$clicked_text, {
     if (!input$clicked_text %in% filenames()) {
