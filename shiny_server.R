@@ -3,7 +3,7 @@
 server <- function(input, output, session) {
 
   onload <- reactiveVal(TRUE)
-
+ 
   # log in values
   token <- reactiveVal("")
   user <- reactiveVal(list())
@@ -193,7 +193,6 @@ server <- function(input, output, session) {
     # print(token())
     # print("here comes the user:")
     # print(user())
-    print("=============")
     print("input$remove_tab")
     print(input$remove_tab)
   })

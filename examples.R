@@ -342,4 +342,131 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 
-(icesConnect::ices_token(username = "luca.lamoni", password = "pp23031987", refresh = TRUE))
+
+
+
+##############################################
+
+library(shiny)
+library(bslib)
+library(fontawesome)
+
+# Define the UI for the card module
+card_module_ui <- function(id) {
+  ns <- NS(id)
+  div(id = ns("card_container"))
+}
+
+# Define the server logic for the card module
+card_module_server <- function(id, card_info, card_ids) {
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+
+    # Function to create a card UI
+    create_card <- function(id, title, body, footer) {
+      card(
+        id = ns(id),
+        card_header(
+          title = title,
+          tagList(
+            span(title),
+            actionButton(
+              inputId = ns(paste0("close_", id)),
+              label = NULL,
+              icon = icon("times"),
+              class = "btn-close-card",
+              style = "
+                position: absolute; 
+                top: 10px; 
+                right: 10px; 
+                border: none; 
+                background-color: transparent;
+                font-size: 1.5em;     
+                width: 30px;           
+                height: 30px;          
+                padding: 0;            
+              "
+            )
+          )
+        ),
+        card_body(body),
+        card_footer(footer)
+      )
+    }
+    
+    observe({
+      lapply(card_ids(), function(card_id) {
+        card <- card_info[[card_id]]
+        
+        # Observe events to open the card
+        observeEvent(input[[paste0("open_", card_id)]], {
+          insertUI(
+            selector = paste0("#", ns("card_container")),
+            ui = create_card(
+              id = card_id, 
+              title = card$title, 
+              body = card$body, 
+              footer = card$footer
+            )
+          )
+        })
+        
+        # Observe events to close the card
+        observeEvent(input[[paste0("close_", card_id)]], {
+          removeUI(selector = paste0("#", ns(card_id)))
+        })
+      })
+    })
+  })
+}
+
+# Define the UI of the main app
+ui <- fluidPage(
+  theme = bs_theme(),  # Use the default Bootstrap theme
+  
+  # Buttons to trigger different sets of cards
+  actionButton(inputId = "show_set1", label = "Show Set 1"),
+  actionButton(inputId = "show_set2", label = "Show Set 2"),
+  
+  # Dynamically generate the open buttons
+  uiOutput("buttons_ui"),
+  
+  # Card module UI
+  card_module_ui("card_module")
+)
+
+# Define the server logic of the main app
+server <- function(input, output, session) {
+
+  # Define a list of card information
+  card_info <- list(
+    card1 = list(id = "card1", title = "Card 1", body = "This is the body of Card 1.", footer = "Card 1 Footer content"),
+    card2 = list(id = "card2", title = "Card 2", body = "This is the body of Card 2.", footer = "Card 2 Footer content"),
+    card3 = list(id = "card3", title = "Card 3", body = "This is the body of Card 3.", footer = "Card 3 Footer content"),
+    card4 = list(id = "card4", title = "Card 4", body = "This is the body of Card 4.", footer = "Card 4 Footer content")
+  )
+  
+  # Reactive list of card IDs
+  card_ids <- reactiveVal(c("card1", "card2"))
+
+  # Dynamically generate the UI for open buttons based on the reactive card IDs
+  output$buttons_ui <- renderUI({
+    lapply(card_ids(), function(card_id) {
+      actionButton(inputId = paste0("open_", card_id), label = paste("Open", card_info[[card_id]]$title))
+    })
+  })
+  
+  # Call the card module server, passing the card information and reactive card IDs
+  card_module_server("card_module", card_info = card_info, card_ids = card_ids)
+  
+  # Update the reactive card IDs when different button sets are clicked
+  observeEvent(input$show_set1, {
+    card_ids(c("card1", "card2"))
+  })
+  
+  observeEvent(input$show_set2, {
+    card_ids(c("card3", "card4"))
+  })
+}
+
+shinyApp(ui, server)
