@@ -1,6 +1,7 @@
 
 # the app logic
 server <- function(input, output, session) {
+
   onload <- reactiveVal(TRUE)
 
   # log in values
@@ -13,11 +14,34 @@ server <- function(input, output, session) {
   file_tree <- reactiveValues()
   repos <- reactiveValues()
   filenames <- reactiveVal(character(0))
-  
+
+
+  # When OK button is pressed, attempt to authenticate. If successful,
+  # remove the modal.
+  observeEvent(input$login, {
+    isolate({
+      Username <- input$username
+      Password <- input$password
+    })
+    jwt <- ices_token(username = Username, password = Password, refresh = TRUE)
+    token(jwt)
+
+    if (!is.empty(token())) {
+      userinfo <- get_with_token("https://taf.ices.dk/api/User", token())
+      user(userinfo)
+      removeModal()
+    } else {
+      showModal(loginModal(failed = TRUE))
+    }
+  })
+
+
   # observe first url
   observeEvent(session$clientData$url_search,
     {
       if (onload()) {
+        showModal(loginModal())
+
         # print("observing first url")
         query <- getQueryString()
 
@@ -60,7 +84,7 @@ server <- function(input, output, session) {
     priority = 99
   )
 
-  # these only run after initialisation
+  # only run after initialisation
   observeEvent(session$clientData$url_search,
     {
       print("observing url")
@@ -105,6 +129,7 @@ server <- function(input, output, session) {
     ignoreInit = TRUE
   )
 
+  # only run after initialisation
   observeEvent(input$remove_tab,
     {
       removeTab(inputId = "tabset", target = paste(tab_title(input$remove_tab)))
@@ -119,8 +144,8 @@ server <- function(input, output, session) {
     ignoreInit = TRUE
   )
 
-
-  # these only run after initialisation
+  # only run after initialisation
+  ## NEVER RUNS!! input$tabset is always NULL
   observeEvent(input$tabset,
     {
       print("observing tab click")
@@ -136,6 +161,24 @@ server <- function(input, output, session) {
     ignoreInit = TRUE
   )
 
+  observeEvent(input$clicked_text, {
+    if (!input$clicked_text %in% filenames()) {
+      filenames(c(filenames(), input$clicked_text))
+    }
+  })
+
+  # Main modules
+  mod_map_selector_server("map_selector_1")
+  mod_file_tree_server("file_tree_1", file_tree)
+  mod_file_tree_server("file_tree_2", file_tree)
+  mod_file_tree_server("file_tree_3", file_tree)
+
+  mod_file_viz_server("file_viz_1", repos, file_tree, filenames)
+  mod_file_viz_server("file_viz_2", repos, file_tree, filenames)
+  mod_file_viz_server("file_viz_3", repos, file_tree, filenames)
+
+
+  # Debugging
   observe({
     print("---changes---")
     print(free_slots())
@@ -153,55 +196,6 @@ server <- function(input, output, session) {
     print("=============")
     print("input$remove_tab")
     print(input$remove_tab)
-    })
-  
-
-  observeEvent(input$clicked_text, {
-    if (!input$clicked_text %in% filenames()) {
-      filenames(c(filenames(), input$clicked_text))
-    }
   })
 
-
-  values <- reactiveValues(authenticated = FALSE)
-
-  # Show modal when button is clicked.
-  # This `observe` is suspended only whith right user credential
-  obs1 <- observe({
-    showModal(dataModal())
-  })
-
-  # When OK button is pressed, attempt to authenticate. If successful,
-  # remove the modal.
-  obs2 <- observeEvent(input$login, {
-    isolate({
-      Username <- input$username
-      Password <- input$password
-    })
-    jwt <- ices_token(username = Username, password = Password, refresh = TRUE)
-    token(jwt)
-
-    if (!is.empty(token())) {
-        values$authenticated <- TRUE
-        userinfo <- get_with_token("https://taf.ices.dk/api/User", token())
-        user(userinfo)
-        obs1$suspend()
-        removeModal()
-      } else {
-        values$authenticated <- FALSE
-        showModal(dataModal(failed = TRUE))
-      }
-  })
-
-
-  # Main modules
-  mod_map_selector_server("map_selector_1")
-  mod_file_tree_server("file_tree_1", file_tree)
-  mod_file_tree_server("file_tree_2", file_tree)
-  mod_file_tree_server("file_tree_3", file_tree)
-
-  mod_file_viz_server("file_viz_1", repos, file_tree, filenames)
-  mod_file_viz_server("file_viz_2", repos, file_tree, filenames)
-  mod_file_viz_server("file_viz_3", repos, file_tree, filenames)
-  # }
 }

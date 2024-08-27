@@ -13,8 +13,28 @@ mod_file_tree_server <- function(id, file_tree) {
 
     output$html_tree <- renderUI({
       if (!is.null(file_tree[[id]])) {
-        HTML(CreateInteractiveTreeHTML(file_tree[[id]], ns))
+        getInteractiveTreeUI(file_tree[[id]], ns)
       }
     })
   })
+}
+
+# UI utilities
+getInteractiveTreeUI <- function(output, ns) {
+  makeOne <- function(i) {
+    paste0(
+      paste(rep("  ", output$level[i] - 1), collapse = ""),
+      "* ",
+      sapply(output$FileFormats[i], get_icon),
+      " ",
+      tags$a(href = "#", id = ns(i), output$filename[i], class = "taf-tree-node")
+    )
+  }
+
+  all <- paste(
+    sapply(1:nrow(output), makeOne),
+    collapse = "\n"
+  )
+
+  HTML(markdown::mark(text = all))
 }

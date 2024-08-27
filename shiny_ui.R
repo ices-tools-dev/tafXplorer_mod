@@ -15,12 +15,12 @@ library(icesConnect)
 
 ########## Load utilities ############
 source("utilities_webservices.R")
+source("utilities_login.R")
 
 # load app data
 load("data/map_data.RData", envir = .GlobalEnv)
 
 ######### Load modules ##############
-source("mod_login.R")
 source("mod_map_selector.R")
 source("mod_file_tree.R")
 source("mod_file_viz.R")
@@ -34,7 +34,7 @@ title_html <- tags$a(
         )
 )
 
-options(spinner.type = 5, 
+options(spinner.type = 5,
         spinner.color = "#00B7A3",
         spinner.size = 0.7)
 
@@ -52,7 +52,7 @@ ui <- fluidPage(
     tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"))
   ),
 
-  
+  # open app with the map selector tab only
   navbarPage(
     collapsible = TRUE,
     fluid = TRUE,
