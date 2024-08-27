@@ -470,3 +470,322 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
+
+
+
+library(shiny)
+
+ui <- fluidPage(
+  # Create a tabsetPanel with an ID to track the active tab
+  navbarPage(
+    id = "tabs",  # Assign an ID for tracking
+    tabPanel("Tab 1", h2("This is Tab 1")),
+    tabPanel("Tab 2", h2("This is Tab 2")),
+    tabPanel("Tab 3", h2("This is Tab 3"))
+  ),
+  
+  # Display the currently active tab
+#   textOutput("active_tab")
+)
+
+server <- function(input, output, session) {
+  # Output the active tab
+  output$active_tab <- renderText({
+    paste("Current active tab:", input$tabs)
+  })
+  
+  # You can also use the active tab to trigger specific actions
+  observeEvent(input$tabs, {
+    # Do something based on the active tab
+    print(paste("Switched to tab:", input$tabs))
+  })
+}
+
+shinyApp(ui, server)
+
+
+
+
+
+library(shiny)
+
+demoUI <- function(id){
+  
+  tabsetPanel(
+    id = "navigation",
+    type = "hidden",
+    
+    tabPanelBody(
+      value = "main_panel",
+      actionButton(NS(id, "info_nav"), "Get info") # Pressing this button should take user to info_panel
+    ),
+    
+    tabPanelBody(
+      value = "info_panel",
+      actionButton(NS(id, "main_nav"), "Back to main page")
+    )
+  )
+  
+}
+
+demoServer <- function(id){
+  moduleServer(id, function(input, output, session) {
+    
+    observeEvent(input$info_nav, {
+      updateTabsetPanel(
+        inputId = "navigation",
+        selected = "info_panel"
+      )
+    })
+    
+    observeEvent(input$main_nav, {
+      updateTabsetPanel(
+        inputId = "navigation",
+        selected = "main_panel"
+      )
+    })
+    
+  })
+}
+
+
+ui <- fluidPage(
+  demoUI("test")
+)
+
+server <- function(input, output, session) {
+  demoServer("test")
+}
+
+shinyApp(ui, server)
+
+
+
+
+library(shiny)
+
+ui <- fluidPage(
+  
+  tabsetPanel(
+    id = "navigation",
+    type = "hidden",
+    
+    tabPanelBody(
+      value = "main_panel",
+      actionButton("info_nav", "Get info")
+    ),
+    
+    tabPanelBody(
+      value = "info_panel",
+      actionButton("main_nav", "Back to main page")
+    )
+  )
+  
+  
+)
+
+server <- function(input, output, session) {
+  
+  observeEvent(input$info_nav, {
+    updateTabsetPanel(
+      inputId = "navigation",
+      selected = "info_panel"
+    )
+  })
+  
+  observeEvent(input$main_nav, {
+    updateTabsetPanel(
+      inputId = "navigation",
+      selected = "main_panel"
+    )
+  })
+  
+  
+}
+
+shinyApp(ui, server)
+
+
+
+
+
+
+
+
+
+library(shiny)
+library(slickR)
+install.packages("slickR")
+carousel_ui <- function(id){
+  ns <- NS(id)
+  slickROutput(ns("slickr"), width="100%")
+}
+
+carousel_module <- function(input, output, session) {
+  output$slickr <- renderSlickR({
+    imgs <- list.files("~/Desktop/imgs", pattern=".png", full.names = TRUE)
+    slickR(imgs)
+  })
+}
+
+my_tab <- function(input,output,session,parent_session,tab_element,tab_name){
+
+  ns = session$ns
+
+  appendTab(inputId = "test_tabs",
+            tabPanel(
+              title = tab_name,
+              value = tab_name,
+              carousel_ui(ns("carousel")) # Operating in the parent session so explicitly supply the namespace
+          ),
+          session = parent_session
+  )
+
+  updateTabsetPanel(parent_session, "test_tabs", selected = tab_name) # Refer to test_tabs from the parent namespace
+
+  # Need to update the carousel every time the user clicks on a tab
+  # Else the carousel is only updated on the latest tab created
+
+  observeEvent(tab_element(),{
+    req(tab_element())
+
+    if(tab_element() == tab_name){
+      cat("Running\n")
+      callModule(carousel_module,"carousel")# This module knows the namespace so no need to supply the namespace
+    }
+  })
+
+}
+
+ui <- fluidPage(  
+      tabsetPanel(id = "test_tabs",
+                  tabPanel(
+                    title = "First tab",
+                    value = "page1",
+                    fluidRow(textInput('new_tab_name', 'New tab name'),
+                             actionButton('add_tab_button','Add'))
+                  )
+      )
+  )
+
+
+server <- function(input, output, session) {
+
+  tab_list <- NULL
+
+  observeEvent(input$add_tab_button,{
+
+                 tab_title <- input$new_tab_name
+                 callModule(my_tab,tab_title,session,reactive(input$test_tabs),input$new_tab_name)
+
+               })
+}
+
+shinyApp(ui, server)
+
+
+
+
+
+# Module 1 UI and Server
+module1UI <- function(id) {
+  ns <- NS(id)
+  tagList(
+    textInput(ns("text"), "Module 1 Text Input"),
+    textOutput(ns("output"))
+  )
+}
+
+module1Server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    output$output <- renderText({
+      paste("Module 1 says:", input$text)
+    })
+  })
+}
+
+# Module 2 UI and Server
+module2UI <- function(id) {
+  ns <- NS(id)
+  tagList(
+    numericInput(ns("number"), "Module 2 Numeric Input", value = 0),
+    textOutput(ns("output"))
+  )
+}
+
+module2Server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    output$output <- renderText({
+      paste("Module 2 received:", input$number)
+    })
+  })
+}
+library(shiny)
+library(shinyjs)
+
+ui <- fluidPage(
+  useShinyjs(),  # Initialize shinyjs
+  tabsetPanel(id = "tabs"),
+  actionButton("add_tab", "Add Tab"),
+  actionButton("remove_tab", "Remove Selected Tab")
+)
+
+server <- function(input, output, session) {
+  tab_counter <- reactiveVal(0)
+  tabs_list <- reactiveVal(list())  # Store a list of active tab IDs and modules
+  
+  # Function to generate UI for a tab with two modules
+  generate_tab_ui <- function(tab_id) {
+    fluidPage(
+      h3(paste("Tab", tab_id)),
+      module1UI(paste0("module1_", tab_id)),
+      module2UI(paste0("module2_", tab_id))
+    )
+  }
+  
+  observeEvent(input$add_tab, {
+    new_tab_number <- tab_counter() + 1
+    new_tab_id <- paste0("tab", new_tab_number)
+    
+    # Add the new tab to the UI
+    appendTab("tabs", tabPanel(paste("Tab", new_tab_number), value = new_tab_id, generate_tab_ui(new_tab_id)), select = TRUE)
+    
+    # Register the modules
+    module1Server(paste0("module1_", new_tab_id))
+    module2Server(paste0("module2_", new_tab_id))
+    
+    # Update the counter and list of tabs
+    tab_counter(new_tab_number)
+    tabs_list(c(tabs_list(), new_tab_id))
+    
+    # Update the URL when a new tab is added
+    runjs(sprintf("history.pushState({}, '', '%s');", new_tab_id))
+  })
+  
+  observeEvent(input$remove_tab, {
+    current_tab <- input$tabs
+    
+    # Remove the tab from the UI
+    removeTab("tabs", target = current_tab)
+    
+    # Update the list of remaining tabs
+    remaining_tabs <- setdiff(tabs_list(), current_tab)
+    tabs_list(remaining_tabs)
+    
+    if (length(remaining_tabs) > 0) {
+      # Select the first remaining tab
+      updateTabsetPanel(session, "tabs", selected = remaining_tabs[1])
+      
+      # Update the URL
+      runjs(sprintf("history.pushState({}, '', '%s');", remaining_tabs[1]))
+    }
+  })
+  
+  observeEvent(input$tabs, {
+    # Update the URL whenever a tab is manually selected
+    runjs(sprintf("history.pushState({}, '', '%s');", input$tabs))
+  })
+}
+
+shinyApp(ui, server)

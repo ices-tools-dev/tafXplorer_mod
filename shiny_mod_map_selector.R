@@ -43,7 +43,7 @@ mod_map_selector_ui <- function(id) {
 mod_map_selector_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
+    
     
       output$map_selector <- renderLeaflet(map)
 
