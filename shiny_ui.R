@@ -55,12 +55,6 @@ ui <- fluidPage(
     fluid = TRUE,
     title = title_html,
     id = "tabset",
-    selected = "Stock assessment selection",
-    windowTitle = "TAFXplorer",
-    tabPanel(
-      title = "Stock assessment selection",
-      value = "Stock assessment selection",
-      mod_map_selector_ui("map_selector_1")
-    )
+    windowTitle = "TAFXplorer"
   )
 )

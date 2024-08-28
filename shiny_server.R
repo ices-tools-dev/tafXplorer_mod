@@ -3,7 +3,7 @@
 server <- function(input, output, session) {
 
   onload <- reactiveVal(TRUE)
- 
+
   # log in values
   token <- reactiveVal("")
   user <- reactiveVal(list())
@@ -30,6 +30,18 @@ server <- function(input, output, session) {
       userinfo <- get_with_token("https://taf.ices.dk/api/User", token())
       user(userinfo)
       removeModal()
+      # add map selector
+      mod_map_selector_server("map_selector_1", token)
+      appendTab(
+        "tabset",
+        tabPanel(
+          title = "Stock assessment selection",
+          value = "Stock assessment selection",
+          mod_map_selector_ui("map_selector_1")
+        ),
+        select = TRUE
+      )
+
     } else {
       showModal(loginModal(failed = TRUE))
     }
@@ -168,7 +180,6 @@ server <- function(input, output, session) {
   })
 
   # Main modules
-  mod_map_selector_server("map_selector_1")
   mod_file_tree_server("file_tree_1", file_tree)
   mod_file_tree_server("file_tree_2", file_tree)
   mod_file_tree_server("file_tree_3", file_tree)
@@ -188,11 +199,12 @@ server <- function(input, output, session) {
     print(paste("on load", onload()))
     print(unlist(reactiveValuesToList(repos)))
     print(filenames())
-    # print(input$clicked_text)
+    print("input$clicked_text:")
+    print(input$clicked_text)
     # print("here comes the token:")
     # print(token())
-    # print("here comes the user:")
-    # print(user())
+    print("here comes the user:")
+    print(user())
     print("input$remove_tab")
     print(input$remove_tab)
   })

@@ -1,6 +1,6 @@
 
-# Function to perform a GET request with JSON web tokens
-get_with_token <- function(url, token) {
+# Function to perform a GET request with JSON web tokens, ... is passed to content() function
+get_with_token <- function(url, token, ...) {
   # Create the HTTP header with the token
   headers <- c(Authorization = paste("Bearer", token))
 
@@ -10,26 +10,16 @@ get_with_token <- function(url, token) {
   # Check if the request was successful
   if (httr::http_status(response)$category == "Success") {
     # Return the response content
-    return(httr::content(response))
+    return(httr::content(response, ...))
   } else {
     # Return an error message
     return(paste("GET request failed with status code", httr::http_status(response)$status_code))
   }
 }
 
-getListStockAssessments <- function() {
-  stocklist <- jsonlite::read_json("https://adminweb06.ices.dk/minapi/getListStockAssessments", simplifyVector = TRUE)
+getListStockAssessments <- function(token) {
+  stocklist <- get_with_token("https://adminweb06.ices.dk/minapi/getListStockAssessments", token, simplifyVector = TRUE)
   return(stocklist)
-}
-
-getEGStatistics <- function() {
-  EGStats <- jsonlite::read_json("https://adminweb06.ices.dk/minapi/getEGStatistics", simplifyVector = TRUE)
-  return(EGStats)
-}
-
-getTAFStocksStatistics <- function() {
-  TAFStats <- jsonlite::read_json("https://adminweb06.ices.dk/minapi/getTAFStocksStatistics", simplifyVector = TRUE)
-  return(TAFStats)
 }
 
 CreateInteractiveTreeDF <- function(repo) {
