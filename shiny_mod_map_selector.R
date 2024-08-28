@@ -42,6 +42,7 @@ mod_map_selector_ui <- function(id) {
 
 mod_map_selector_server <- function(id, token) {
   moduleServer(id, function(input, output, session) {
+    print("mod_map_selector_server running")
     ns <- session$ns
 
     output$map_selector <- renderLeaflet(map)
@@ -88,8 +89,8 @@ mod_map_selector_server <- function(id, token) {
     )
 
     repo_list <- reactive({
-      req(input$selected_locations, token())
-      stock_list_long <- getListStockAssessments(token())
+      req(input$selected_locations)
+      stock_list_long <- getListStockAssessments()
       stock_list_long <- purrr::map_dfr(
         .x = input$selected_locations,
         .f = function(.x) stock_list_long %>% dplyr::filter(str_detect(ecoregion, .x))
@@ -107,7 +108,8 @@ mod_map_selector_server <- function(id, token) {
           )
       }
     })
-    group_filter_temp <- select_group_server(
+
+    group_filter_full <- select_group_server(
       id = "my-filters",
       data = repo_list(),
       vars = reactive(c(
@@ -120,7 +122,7 @@ mod_map_selector_server <- function(id, token) {
         need(!nrow(repo_list()) == 0, "No published stocks in the selected ecoregion and year")
       )
 
-      group_filter_temp() %>%
+      group_filter_full() %>%
         select(
           # "Select",
           "stockCode",
@@ -174,10 +176,11 @@ mod_map_selector_server <- function(id, token) {
       )
     })
 
-    selected <- reactive(getReactableState("table", "selected"))
+    #selected <- reactive(getReactableState("table", "selected"))
 
     observe({
-      selected_row <- group_filter_temp()[selected(), ]
+      req(input$selected_locations)
+      selected_row <- group_filter_full()[getReactableState("table", "selected"), ]
       if (nrow(selected_row) > 0) {
         updateURL(repo = basename(selected_row$gitHubUrl))
       }

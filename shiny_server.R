@@ -31,7 +31,7 @@ server <- function(input, output, session) {
       user(userinfo)
       removeModal()
       # add map selector
-      mod_map_selector_server("map_selector_1", token)
+      mod_map_selector_server("map_selector_1")
       appendTab(
         "tabset",
         tabPanel(
@@ -41,7 +41,6 @@ server <- function(input, output, session) {
         ),
         select = TRUE
       )
-
     } else {
       showModal(loginModal(failed = TRUE))
     }

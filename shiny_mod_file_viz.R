@@ -9,6 +9,7 @@ mod_file_viz_ui <- function(id) {
 
 mod_file_viz_server <- function(id, repos, file_tree, filenames) {
   moduleServer(id, function(input, output, session) {
+    print("mod_file_viz_server running")
     ns <- session$ns
     id_int <- as.integer(gsub("file_viz_", "", id))
     file_tree_id <- paste0("file_tree_", id_int)

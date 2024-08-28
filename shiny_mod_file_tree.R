@@ -8,6 +8,7 @@ mod_file_tree_ui <- function(id) {
 
 mod_file_tree_server <- function(id, file_tree) {
   moduleServer(id, function(input, output, session) {
+    print("mod_file_tree_server running")
     ns <- session$ns
     id_int <- as.integer(gsub("file_tree_", "", id))
 

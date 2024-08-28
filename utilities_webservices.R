@@ -17,8 +17,8 @@ get_with_token <- function(url, token, ...) {
   }
 }
 
-getListStockAssessments <- function(token) {
-  stocklist <- get_with_token("https://adminweb06.ices.dk/minapi/getListStockAssessments", token, simplifyVector = TRUE)
+getListStockAssessments <- function() {
+  stocklist <- jsonlite::read_json("https://adminweb06.ices.dk/minapi/getListStockAssessments", simplifyVector = TRUE)
   return(stocklist)
 }
 
