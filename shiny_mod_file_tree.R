@@ -38,3 +38,23 @@ getInteractiveTreeUI <- function(output, ns) {
 
   HTML(markdown::mark(text = all))
 }
+
+# Function to apply shiny::icon() based on a condition
+get_icon <- function(text) {
+  if (nchar(text) == 0) {
+    x <- paste(shiny::icon("folder-open"))
+  } else if (text == "csv") {
+    x <- paste(shiny::icon("file-csv"))
+  } else if (text == "png") {
+    x <- paste(shiny::icon("file-image"))
+  } else if (text == "rds" | text == "R" | text == "r") {
+    x <- paste(shiny::icon("r-project"))
+  } else if (text == "txt") {
+    x <- paste(shiny::icon("code"))
+  } else if (text == "bib") {
+    x <- paste(shiny::icon("book"))
+  } else {
+    x <- ""
+  }
+  return(x)
+}

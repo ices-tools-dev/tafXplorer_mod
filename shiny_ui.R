@@ -39,9 +39,6 @@ options(spinner.type = 5,
         spinner.size = 0.7)
 
 
-
-
-
 # shiny user interface
 ui <- fluidPage(
   tags$head(

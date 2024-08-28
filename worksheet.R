@@ -7,7 +7,7 @@ install.deps()
 
 taf.boot()
 source.all()
-source.taf("shiny.R"); runApp('shiny', launch.browser = TRUE)
+source.taf("shiny.R"); runApp('shiny', launch.browser = FALSE)
 
 
 taf.boot.path()
