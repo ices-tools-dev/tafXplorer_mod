@@ -1,40 +1,46 @@
 mod_map_selector_ui <- function(id) {
   ns <- NS(id)
+
+  leftCard <- card(
+    tags$img(id = "logo", src = "TAFXplorer blue.png"),
+    leaflet::leafletOutput(ns("map_selector")),
+    virtualSelectInput(
+      inputId = ns("selected_locations"),
+      label = "ICES Ecoregions",
+      choices = vocabs$ecoregions,
+      selected = grep("North Sea", vocabs$ecoregions, value = TRUE),
+      multiple = TRUE,
+      width = "100%"
+    ),
+    select_group_ui(
+      id = ns("my-filters"),
+      params = list(
+        year = list(inputId = "year", label = "Assessment year:"),
+        stockCode = list(inputId = "stockCode", label = "Stock code:"),
+        species = list(inputId = "species", label = "Common name:"),
+        expertGroup = list(inputId = "expertGroup", label = "Expert group:"),
+        dataCategory = list(inputId = "dataCategory", label = "Data category:")
+      ),
+      inline = FALSE,
+      vs_args = list(
+        search = TRUE,
+        optionsCount = 5
+      )
+    )
+  )
+
+  rightCard <- card(
+    reactableOutput(ns("table"))
+  )
+
+  
   tagList(
     page_fillable(
-      layout_columns(
-        card(
-          tags$img(id = "logo", src = "TAFXplorer blue.png"),
-          leaflet::leafletOutput(ns("map_selector")),
-          virtualSelectInput(
-            inputId = ns("selected_locations"),
-            label = "ICES Ecoregions",
-            choices = vocabs$ecoregions,
-            selected = grep("North Sea", vocabs$ecoregions, value = TRUE),
-            multiple = TRUE,
-            width = "100%"
-          ),
-          select_group_ui(
-            id = ns("my-filters"),
-            params = list(
-              year = list(inputId = "year", label = "Assessment year:"),
-              stockCode = list(inputId = "stockCode", label = "Stock code:"),
-              species = list(inputId = "species", label = "Common name:"),
-              expertGroup = list(inputId = "expertGroup", label = "Expert group:"),
-              dataCategory = list(inputId = "dataCategory", label = "Data category:")
-            ),
-            inline = FALSE,
-            vs_args = list(
-              search = TRUE,
-              optionsCount = 5
-            )
-          )
-        ),
-        column(
-          12,
-          reactableOutput(ns("table"))
-        ),
-        col_widths = c(4, 8)
+      layout_column_wrap(
+        width = NULL,
+        style = htmltools::css(grid_template_columns = "1fr 2fr"),
+        leftCard,
+        rightCard
       )
     )
   )
