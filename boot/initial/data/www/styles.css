@@ -48,7 +48,7 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
   padding: 0;
   margin: 0;
   width: 100%;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   
 }
 
@@ -60,14 +60,14 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
   margin-top: -2px;
   padding-bottom: calc(0.5rem + 2px)
   */
-  margin-top: -7px;
-  padding-bottom: 7px;
+  /* margin-top: -7px;
+  padding-bottom: 7px; */
 }
 
 .navbar-default .navbar-nav>li>a {
   color: #ffffff;
-  margin-top: -2px;
-  padding-bottom: calc(0.5rem + 2px);
+  /* margin-top: -2px; */
+  /* padding-bottom: calc(0.5rem + 2px); */
   font-size: 18px;
 }
 
@@ -75,8 +75,8 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus {
   color: #000000; 
   background-color: #00B7A3;
-  margin-top: -7px;
-  padding-bottom: 7px;
+  /* margin-top: -7px;
+  padding-bottom: 7px; */
   
 }
 
