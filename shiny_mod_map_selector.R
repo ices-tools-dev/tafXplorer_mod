@@ -2,15 +2,16 @@ mod_map_selector_ui <- function(id) {
   ns <- NS(id)
 
   leftCard <- card(
-    tags$img(id = "logo", src = "TAFXplorer blue.png"),
-    leaflet::leafletOutput(ns("map_selector")),
+    tags$img(id = "logo", class = "center-block", src = "TAFXplorer blue.png"),
+    leaflet::leafletOutput(ns("map_selector"), width = "95%"),
+    # style = "#selected_locations {width: 90%;margin-left: auto !important; margin-right: auto !important;}",
     virtualSelectInput(
       inputId = ns("selected_locations"),
       label = "ICES Ecoregions",
       choices = vocabs$ecoregions,
       selected = grep("North Sea", vocabs$ecoregions, value = TRUE),
       multiple = TRUE,
-      width = "100%"
+      width = "90%"
     ),
     select_group_ui(
       id = ns("my-filters"),
@@ -33,7 +34,7 @@ mod_map_selector_ui <- function(id) {
     reactableOutput(ns("table"))
   )
 
-  
+
   tagList(
     page_fillable(
       layout_column_wrap(

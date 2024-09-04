@@ -138,12 +138,30 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
   box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
 }
 
-#logo {
+/* #logo {
   height: auto;
   width: 70% !important;
   margin-top: 10px;
   margin-bottom: -65px;
+} */
+#logo {
+  height: auto;
+  width: 80% !important;
+  margin-top: 10px;
+  margin-bottom: 10px
 }
+
+#map_selector_1-map_selector {
+  margin-top: 0px;
+  margin-bottom: 15px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  height: calc(60vh - 220px) !important;
+  overflow-y: hidden;
+}
+
+
 
 .panel-title {
   margin-top: 0;
@@ -326,19 +344,58 @@ caption {
   }
 }
 
-
+.card {
+  /* text-align: center; */
+  border-radius: 10px;
+}
 
 .card-header {
   background-color: #CCF1ED;
   padding-bottom: 0%;
+  /* border-radius: 10px; */
 }
 
 .card-body {
   color: #002552;
   background-color: #E6E7E8;
+  /* border-radius: 10px; */
 }
 
 .nav-underline .nav-link.active, .nav-underline :where(ul.nav.navbar-nav > li)>a.active, .nav-underline .nav-tabs>li>a.active, .nav-underline .nav-pills>li>a.active {
   font-weight: 500;
   background-color: #00B7A3;
 }
+
+#map_selector_1-table{
+  width: auto;
+  height: auto;
+  visibility: inherit;
+  margin-top: 0;
+}
+
+#file_viz_1-file_viz {
+  margin-top: -65px;
+  text-align: center;
+}
+#file_viz_2-file_viz {
+  margin-top: -65px;
+  text-align: center;
+}
+#file_viz_3-file_viz {
+  margin-top: -65px;
+  text-align: center;
+}
+
+.show {
+  display: block !important;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-group, .shiny-input-container{
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
