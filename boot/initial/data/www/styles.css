@@ -75,18 +75,10 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus {
   color: #000000; 
   background-color: #00B7A3;
-  /* margin-top: -7px;
-  padding-bottom: 7px; */
-  
 }
 
 .disabled {
-  /*
-  background: #819898 !important;
-  cursor: not-allowed;
-  border-color:#819898;
-  color: #737373;
-*/
+
   color: #ffffff;
   cursor: not-allowed;  
   background-color: transparent;
@@ -101,15 +93,7 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
 .bslib-grid>*{
   margin-top: -60px;
 }
-/* .main, .bslib-gap-spacing, .html-fill-container{
-  margin-top: 20px;
-} */
-/* .bslib-sidebar-5766{
-  margin-top: 40px;
-}
-.bslib-sidebar-8778 {
-  margin-top: 40px;
-} */
+
 .navbar-default .navbar-nav>li>a:hover {
   color: #cecece;
   background-color: transparent;
@@ -138,12 +122,6 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
   box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
 }
 
-/* #logo {
-  height: auto;
-  width: 70% !important;
-  margin-top: 10px;
-  margin-bottom: -65px;
-} */
 #logo {
   height: auto;
   width: 80% !important;
@@ -192,13 +170,8 @@ input[type=radio] {
   transition: 0.2s all linear;
   margin-right: 5px;
   transition: 1s opacity 200ms;
-  /*position: relative;
-  top: 4px;
-
-  border: 0px;
-  width: 100%;
-  height: 2em;*/
 }
+
 input[type=radio]:checked {
   /*border: 10px solid #f15d2a;*/
   border: 10px solid #00B7A3;
@@ -237,9 +210,7 @@ input[type=radio]:checked {
   visibility: visible;
 }
 
-/* .Reactable, .ReactTable {
-  margin-top: 40px;
-} */
+
 .dataTables_wrapper {
   position: relative;
   clear: both;
