@@ -16,6 +16,7 @@ library(icesConnect)
 ########## Load utilities ############
 source("utilities_webservices.R")
 source("utilities_login.R")
+source("utilities.R")
 
 # load app data
 load("data/map_data.RData", envir = .GlobalEnv)
