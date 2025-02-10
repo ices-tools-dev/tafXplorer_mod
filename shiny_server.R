@@ -16,42 +16,53 @@ server <- function(input, output, session) {
   filenames <- reactiveVal(character(0))
 
 
-  # When OK button is pressed, attempt to authenticate. If successful,
-  # remove the modal.
-  observeEvent(input$login, {
-    isolate({
-      Username <- input$username
-      Password <- input$password
-    })
-    jwt <- ices_token(username = Username, password = Password, refresh = TRUE)
-    token(jwt)
+  # # When OK button is pressed, attempt to authenticate. If successful,
+  # # remove the modal.
+  # observeEvent(input$login, {
+  #   isolate({
+  #     Username <- input$username
+  #     Password <- input$password
+  #   })
+  #   jwt <- ices_token(username = Username, password = Password, refresh = TRUE)
+  #   token(jwt)
 
-    if (!is.empty(token())) {
-      userinfo <- get_with_token("https://taf.ices.dk/api/User", token())
-      user(userinfo)
-      removeModal()
-      # add map selector
-      mod_map_selector_server("map_selector_1")
-      appendTab(
-        "tabset",
-        tabPanel(
-          title = "Stock assessment selection",
-          value = "Stock assessment selection",
-          mod_map_selector_ui("map_selector_1")
-        ),
-        select = TRUE
-      )
-    } else {
-      showModal(loginModal(failed = TRUE))
-    }
-  })
+  #   if (!is.empty(token())) {
+  #     userinfo <- get_with_token("https://taf.ices.dk/api/User", token())
+  #     user(userinfo)
+  #     removeModal()
+  #     # add map selector
+  #     mod_map_selector_server("map_selector_1")
+  #     appendTab(
+  #       "tabset",
+  #       tabPanel(
+  #         title = "Stock assessment selection",
+  #         value = "Stock assessment selection",
+  #         mod_map_selector_ui("map_selector_1")
+  #       ),
+  #       select = TRUE
+  #     )
+  #   } else {
+  #     showModal(loginModal(failed = TRUE))
+  #   }
+  # })
+
+  mod_map_selector_server("map_selector_1")
+  appendTab(
+    "tabset",
+    tabPanel(
+      title = "Stock assessment selection",
+      value = "Stock assessment selection",
+      mod_map_selector_ui("map_selector_1")
+    ),
+    select = TRUE
+  )
 
 
   # observe first url
   observeEvent(session$clientData$url_search,
     {
       if (onload()) {
-        showModal(loginModal())
+        # showModal(loginModal())
 
         # print("observing first url")
         query <- getQueryString()
@@ -188,24 +199,24 @@ server <- function(input, output, session) {
   mod_file_viz_server("file_viz_3", repos, file_tree, filenames)
 
 
-  # Debugging
-  observe({
-    print("---changes---")
-    print(free_slots())
-    print("input$tabset")
-    print(input$tabset)
-    print(session$clientData$url_search)
-    print(paste("on load", onload()))
-    print(unlist(reactiveValuesToList(repos)))
-    print(filenames())
-    print("input$clicked_text:")
-    print(input$clicked_text)
-    # print("here comes the token:")
-    # print(token())
-    print("here comes the user:")
-    print(user())
-    print("input$remove_tab")
-    print(input$remove_tab)
-  })
+  # # Debugging
+  # observe({
+  #   print("---changes---")
+  #   print(free_slots())
+  #   print("input$tabset")
+  #   print(input$tabset)
+  #   print(session$clientData$url_search)
+  #   print(paste("on load", onload()))
+  #   print(unlist(reactiveValuesToList(repos)))
+  #   print(filenames())
+  #   print("input$clicked_text:")
+  #   print(input$clicked_text)
+  #   # print("here comes the token:")
+  #   # print(token())
+  #   print("here comes the user:")
+  #   print(user())
+  #   print("input$remove_tab")
+  #   print(input$remove_tab)
+  # })
 
 }
