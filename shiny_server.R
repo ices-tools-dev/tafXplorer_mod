@@ -50,8 +50,8 @@ server <- function(input, output, session) {
   appendTab(
     "tabset",
     tabPanel(
-      title = "Stock assessment selection",
-      value = "Stock assessment selection",
+      title = "TAF assessment selection",
+      value = "TAF assessment selection",
       mod_map_selector_ui("map_selector_1")
     ),
     select = TRUE
