@@ -131,12 +131,30 @@ server <- function(input, output, session) {
           "tabset",
           tabPanel(
             tab_title(query$repo),
-            layout_sidebar(
-              sidebar = sidebar(
-                mod_file_tree_ui(paste0("file_tree_", free_slots()[1])),
-                width = "40%"
+            tabsetPanel(
+              tabPanel(
+                "Files",
+                layout_sidebar(
+                  sidebar = sidebar(
+                    mod_file_tree_ui(paste0("file_tree_", free_slots()[1])),
+                    width = "40%"
+                  ),
+                  mod_file_viz_ui(paste0("file_viz_", free_slots()[1]))
+                )
               ),
-              mod_file_viz_ui(paste0("file_viz_", free_slots()[1]))
+              tabPanel(
+                "FLR stock object",
+                layout_sidebar(
+                  sidebar = sidebar(
+                    mod_FLR_plot_selection_ui(paste0("FLR_plot_", free_slots()[1])),
+                    width = "40%"
+              ),
+              mod_FLR_plot_viz_ui(paste0("FLR_plot_", free_slots()[1]))
+                
+              )),
+              tabPanel(
+                "Diagnostics"
+              )
             )
           ),
           select = TRUE

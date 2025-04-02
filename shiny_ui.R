@@ -25,6 +25,8 @@ load("data/map_data.RData", envir = .GlobalEnv)
 source("mod_map_selector.R")
 source("mod_file_tree.R")
 source("mod_file_viz.R")
+source("mod_FLR_plot_selection.R")
+source("mod_FLR_plot_viz.R")
 
 title_html <- tags$a(
     href = "https://ices-taf.shinyapps.io/tafxplorer/",

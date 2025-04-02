@@ -30,5 +30,7 @@ cp("shiny_server.R", "shiny/server.R")
 cp("shiny_mod_map_selector.R", "shiny/mod_map_selector.R")
 cp("shiny_mod_file_tree.R", "shiny/mod_file_tree.R")
 cp("shiny_mod_file_viz.R", "shiny/mod_file_viz.R")
+cp("shiny_mod_FLR_plot_selection.R", "shiny/mod_FLR_plot_selection.R")
+cp("shiny_mod_FLR_plot_viz.R", "shiny/mod_FLR_plot_viz.R")
 
 msg("Created shiny app. To run, use: \n\n\tlibrary(shiny)\n\trunApp('shiny')\n\n")
