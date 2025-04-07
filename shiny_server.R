@@ -144,14 +144,23 @@ server <- function(input, output, session) {
               ),
               tabPanel(
                 "FLR stock object",
+                # sidebarLayout(
+                #             sidebarPanel(
+                #               mod_FLR_plot_selection_ui(paste0("plot_selector_", free_slots()[1]))
+                #             ),
+                #             mainPanel(
+                #               mod_FLR_plot_viz_ui(paste0("plot_display_", free_slots()[1]))
+                #             )
+                #           )
                 layout_sidebar(
                   sidebar = sidebar(
-                    mod_FLR_plot_selection_ui(paste0("FLR_plot_", free_slots()[1])),
-                    width = "40%"
+                    mod_FLR_plot_selection_ui(paste0("plot_selector_", free_slots()[1])),
+                    width = "20%"
               ),
-              mod_FLR_plot_viz_ui(paste0("FLR_plot_", free_slots()[1]))
+              mod_FLR_plot_viz_ui(paste0("plot_display_", free_slots()[1]))
                 
-              )),
+              )
+              ),
               tabPanel(
                 "Diagnostics"
               )
@@ -216,25 +225,44 @@ server <- function(input, output, session) {
   mod_file_viz_server("file_viz_2", repos, file_tree, filenames)
   mod_file_viz_server("file_viz_3", repos, file_tree, filenames)
 
+  selected_plot_1 <- mod_FLR_plot_selection_server("plot_selector_1")
+  mod_FLR_plot_viz_server("plot_display_1", selected_plot_1)
+
+  selected_plot_2 <- mod_FLR_plot_selection_server("plot_selector_2")
+  mod_FLR_plot_viz_server("plot_display_2", selected_plot_2)
+
+  selected_plot_3 <- mod_FLR_plot_selection_server("plot_selector_3")
+  mod_FLR_plot_viz_server("plot_display_3", selected_plot_3)
+
+  # plot_type_1 <- mod_FLR_plot_selection_server("FLR_plot_1")
+  # mod_FLR_plot_viz_server("FLR_plot_1", plot_type_1)
+
+  # plot_type_2 <- mod_FLR_plot_selection_server("FLR_plot_2")
+  # mod_FLR_plot_viz_server("FLR_plot_2", plot_type_2)
+
+  # plot_type_3 <- mod_FLR_plot_selection_server("FLR_plot_3")
+  # mod_FLR_plot_viz_server("FLR_plot_3", plot_type_3)
+
 
   # # Debugging
   # observe({
-  #   print("---changes---")
-  #   print(free_slots())
-  #   print("input$tabset")
-  #   print(input$tabset)
-  #   print(session$clientData$url_search)
-  #   print(paste("on load", onload()))
-  #   print(unlist(reactiveValuesToList(repos)))
-  #   print(filenames())
-  #   print("input$clicked_text:")
-  #   print(input$clicked_text)
-  #   # print("here comes the token:")
-  #   # print(token())
-  #   print("here comes the user:")
-  #   print(user())
-  #   print("input$remove_tab")
-  #   print(input$remove_tab)
+  #   # print("---changes---")
+  #   # print(free_slots())
+  #   # print("input$tabset")
+  #   # print(input$tabset)
+  #   # print(session$clientData$url_search)
+  #   # print(paste("on load", onload()))
+  #   # print(unlist(reactiveValuesToList(repos)))
+  #   # print(filenames())
+  #   # print("input$clicked_text:")
+  #   # print(input$clicked_text)
+  #   # # print("here comes the token:")
+  #   # # print(token())
+  #   # print("here comes the user:")
+  #   # print(user())
+  #   # print("input$remove_tab")
+  #   # print(input$remove_tab)
+  #   
   # })
 
 }

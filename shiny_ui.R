@@ -12,6 +12,8 @@ library(shinyjs)
 library(bslib)
 library(RCurl)
 library(icesConnect)
+library(FLCore)
+library(ggplotFL)
 
 ########## Load utilities ############
 source("utilities_webservices.R")
@@ -20,6 +22,11 @@ source("utilities.R")
 
 # load app data
 load("data/map_data.RData", envir = .GlobalEnv)
+
+# Load datasets for tutorial
+data("ple4")
+data("ple4sex")
+data("nsher")
 
 ######### Load modules ##############
 source("mod_map_selector.R")
