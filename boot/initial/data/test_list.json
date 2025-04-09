@@ -1,0 +1,36 @@
+[
+    {
+    "id": 1,
+    "stockCode": "nep.fu.2829",
+    "year": 2024,
+    "ecoregion": "Greater North Sea",
+    "expertGroup": "WGNSSK",
+    "CommonName": "Norway lobster",
+    "dataCategory": "1",
+    "gitHubUrl": "https://github.com/ices-taf/2017_nep.fu.2829",
+    "assessmentKey": 12003,
+    "AssessmentType": "SAM",
+    "DataFiles": 1,
+    "ModelFiles": 1,
+    "OutputFiles": 1,
+    "ReportFiles": 1,
+    "SuccessfulRun": "TRUE"
+    },
+    {
+    "id": 1,
+    "stockCode": "rjc.27.3a47d",
+    "year": 2024,
+    "ecoregion": "Baltic Sea",
+    "expertGroup": "WGNSSK",
+    "CommonName": "Norway lobster",
+    "dataCategory": "3.2",
+    "gitHubUrl": "https://github.com/ices-taf/2017_rjc.27.3a47d",
+    "assessmentKey": 18023,
+    "AssessmentType": "SAM",
+    "DataFiles": 1,
+    "ModelFiles": 2,
+    "OutputFiles": 3,
+    "ReportFiles": 3,
+    "SuccessfulRun": "FALSE"
+    }
+]
