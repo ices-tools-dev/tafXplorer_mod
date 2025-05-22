@@ -14,6 +14,8 @@ library(RCurl)
 library(icesConnect)
 library(FLCore)
 library(ggplotFL)
+library(RColorBrewer)
+library(scales)
 
 ########## Load utilities ############
 source("utilities_webservices.R")
