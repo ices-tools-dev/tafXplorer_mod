@@ -1,7 +1,5 @@
-
 # the app logic
 server <- function(input, output, session) {
-
   onload <- reactiveVal(TRUE)
 
   # log in values
@@ -47,15 +45,26 @@ server <- function(input, output, session) {
   # })
 
   mod_map_selector_server("map_selector_1")
-  appendTab(
-    "tabset",
-    tabPanel(
-      title = "TAF assessment selection",
-      value = "TAF assessment selection",
-      mod_map_selector_ui("map_selector_1")
-    ),
-    select = TRUE
-  )
+  # appendTab(
+  #   "tabset",
+  #   tabPanel(
+  #     title = "TAF assessment selection",
+  #     value = "TAF assessment selection",
+  #     mod_map_selector_ui("map_selector_1")
+  #   ),
+  #   select = TRUE
+  # )
+  # insertTab(
+  #   inputId = "tabset",
+  #   target = "resources",
+  #   tabPanel(
+  #     title = "TAF assessment selection",
+  #     value = "TAF assessment selection",
+  #     mod_map_selector_ui("map_selector_1")
+  #   ),
+  #   position = "before",
+  #   select = TRUE
+  # )
 
 
   # observe first url
@@ -218,5 +227,4 @@ server <- function(input, output, session) {
   #   print("input$remove_tab")
   #   print(input$remove_tab)
   # })
-
 }

@@ -35,47 +35,7 @@ table.dataTable tbody tr:nth-child(odd) {background-color: #E6E7E8 !important;}
 
 #tbl {outline:#dddddd solid 1px;}
 
-.navbar-default {
-  background-color: #002B5F; /*#2fa4e7;*/
-  border-color: #002B5F; /* #1995dc*/
-  background-image: linear-gradient(#00438fd2, #002B5F 60%, #002552); /*linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5);*/
-  background-repeat: no-repeat;
-  box-shadow: 0 1px 10px rgb(0 0 0 / 10%);
-  /*--bs-navbar-padding-y: .2rem;*/
-  font-size: 18px;
-  /* position: fixed; */
-  top: 0;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  /* margin-bottom: 10px; */
-  
-}
 
-
-.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
-  color: #000000; 
-  background-color: #00B7A3;
-  /*
-  margin-top: -2px;
-  padding-bottom: calc(0.5rem + 2px)
-  */
-  /* margin-top: -7px;
-  padding-bottom: 7px; */
-}
-
-.navbar-default .navbar-nav>li>a {
-  color: #ffffff;
-  /* margin-top: -2px; */
-  /* padding-bottom: calc(0.5rem + 2px); */
-  font-size: 18px;
-}
-
-
-.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus {
-  color: #000000; 
-  background-color: #00B7A3;
-}
 
 .disabled {
 
@@ -370,3 +330,180 @@ caption {
   margin-right: auto;
 }
 
+
+/* .navbar-default {
+  background-color: #002B5F; 
+  border-color: #002B5F; 
+  background-image: linear-gradient(#00438fd2, #002B5F 60%, #002552);
+  background-repeat: no-repeat;
+  box-shadow: 0 1px 10px rgb(0 0 0 / 10%);
+  
+  font-size: 18px;
+  
+  top: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  
+  
+}
+
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
+  color: #000000; 
+  background-color: #00B7A3;
+  
+}
+
+.navbar-default .navbar-nav>li>a {
+  color: #ffffff;
+  
+  font-size: 18px;
+}
+
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus {
+  color: #000000; 
+  background-color: #00B7A3;
+} */
+body {
+  font-family: 'Gothic A1', sans-serif;
+  font-size: medium;
+}
+
+/* remove side gutters so navbar reaches screen edges */
+.container-fluid {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* give content its normal padding back, but not the navbar */
+.tab-content {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* NAVBAR */
+.navbar.navbar-default {
+  background-color: #002B5F;
+  border-color: #002B5F;
+  background-image: linear-gradient(#00438fd2, #002B5F 60%, #002552);
+  background-repeat: no-repeat;
+  box-shadow: 0 1px 10px rgb(0 0 0 / 10%);
+  border-radius: 0;
+  margin: 0;
+  min-height: 52px;
+  height: 52px;
+}
+
+/* brand/logo area */
+.navbar-default .navbar-header {
+  height: 52px;
+}
+
+.navbar-default .navbar-brand {
+  height: 52px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand-logo {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  /* margin-top: -15px;
+  margin-bottom: 0px;
+  padding-right:10px; */
+}
+
+.navbar-brand-logo img {
+  display: block;
+  height: 42px;
+  width: auto;
+  max-width: none;
+}
+
+/* tabs */
+.navbar-default .navbar-nav > li {
+  height: 52px;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: #ffffff;
+  font-size: 18px;
+  line-height: 1;
+  height: 52px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* selected tab fills the full navbar height */
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #000000;
+  background-color: #00B7A3;
+  height: 52px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* hover */
+.navbar-default .navbar-nav > li > a:hover {
+  color: #cecece;
+  background-color: transparent;
+}
+
+/* remove odd vertical offsets on right-side nav items */
+.navbar-default .navbar-right,
+.navbar-default .navbar-nav.navbar-right {
+  margin-right: 10px;
+}
+
+.navbar-default .navbar-nav.navbar-right > li,
+.navbar-default .navbar-right > li {
+  height: 52px;
+  display: flex;
+  align-items: center;
+}
+
+
+
+
+/* share button */
+.fx-share-btn {
+  color: #ffffff !important;
+  background-image: linear-gradient(#00a390, #00B7A3 60%, #02d8bf);
+  background-repeat: no-repeat;
+  background-color: #00B6F1;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-bottom-color: #e6e6e6;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1;
+  height: 32px;
+  padding: 10px 12px;
+  margin: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.fx-share-btn .fa,
+.fx-share-btn .glyphicon {
+  margin-right: 6px;
+}
+
+.fx-share-btn:hover,
+.fx-share-btn:focus,
+.fx-share-btn:active {
+  color: #ffffff !important;
+  background-image: linear-gradient(#00a390, #00B7A3 60%, #02d8bf);
+  background-color: #00aee8;
+}

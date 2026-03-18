@@ -96,7 +96,8 @@ mod_map_selector_server <- function(id, token) {
 
     repo_list <- reactive({
       req(input$selected_locations)
-      stock_list_long <- getListStockAssessments()
+      # stock_list_long <- getListStockAssessments()
+      stock_list_long <- jsonlite::fromJSON("www/test_list.json")
       stock_list_long <- purrr::map_dfr(
         .x = input$selected_locations,
         .f = function(.x) stock_list_long %>% dplyr::filter(str_detect(ecoregion, .x))

@@ -18,9 +18,12 @@ cp("data/map_data.RData", "shiny/data")
 
 
 # copy in utilities
-cp("utilities_webservices.R", "shiny/utilities_webservices.R")
-cp("utilities_login.R", "shiny/utilities_login.R")
-cp("utilities.R", "shiny/utilities.R")
+cp("fct_webservices.R", "shiny/fct_webservices.R")
+cp("fct_login.R", "shiny/fct_login.R")
+cp("fct_helpers.R", "shiny/fct_helpers.R")
+cp("fct_file_tree.R", "shiny/fct_file_tree.R")
+cp("fct_file_viz.R", "shiny/fct_file_viz.R")
+cp("fct_resources.R", "shiny/fct_resources.R")
 
 # copy in server and ui scripts
 cp("shiny_ui.R", "shiny/ui.R")
@@ -30,5 +33,6 @@ cp("shiny_server.R", "shiny/server.R")
 cp("shiny_mod_map_selector.R", "shiny/mod_map_selector.R")
 cp("shiny_mod_file_tree.R", "shiny/mod_file_tree.R")
 cp("shiny_mod_file_viz.R", "shiny/mod_file_viz.R")
+cp("shiny_mod_resources.R", "shiny/mod_resources.R")
 
 msg("Created shiny app. To run, use: \n\n\tlibrary(shiny)\n\trunApp('shiny')\n\n")
