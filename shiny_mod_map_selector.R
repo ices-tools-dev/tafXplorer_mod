@@ -2,7 +2,15 @@ mod_map_selector_ui <- function(id) {
   ns <- NS(id)
 
   leftCard <- card(
-    tags$img(id = "logo", class = "center-block", src = "TAFXplorer blue.png"),
+    # tags$img(id = "logo", class = "center-block", src = "TAFXplorer blue.png"),
+    div(
+      style = "display: flex; justify-content: center; align-items: center;",
+      tags$img(
+        id = "logo",
+        src = "TAFXplorer blue.png",
+        style = "max-width: 100%; height: auto;"
+      )
+    ),
     leaflet::leafletOutput(ns("map_selector"), width = "95%"),
     virtualSelectInput(
       inputId = ns("selected_locations"),
@@ -183,7 +191,7 @@ mod_map_selector_server <- function(id, token) {
       )
     })
 
-    #selected <- reactive(getReactableState("table", "selected"))
+    # selected <- reactive(getReactableState("table", "selected"))
 
     observe({
       req(input$selected_locations)
