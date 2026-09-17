@@ -640,3 +640,470 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
+
+
+
+
+library(shiny)
+library(bslib)
+
+ui <- fluidPage(
+  tabsetPanel(
+    tabPanel("Plots", 
+      layout_sidebar(
+        sidebar = sidebar(
+          selectInput("plotType", "Choose a plot:",
+                      choices = c("Histogram" = "hist",
+                                  "Boxplot" = "boxplot",
+                                  "Scatterplot" = "scatter"))
+        ),
+        # mainPanel = mainPanel(
+          plotOutput("plot")
+        # )
+      )
+    )
+  )
+)
+
+server <- function(input, output, session) {
+  output$plot <- renderPlot({
+    req(input$plotType)
+    if (input$plotType == "hist") {
+      hist(rnorm(100), col = "skyblue", main = "Histogram")
+    } else if (input$plotType == "boxplot") {
+      boxplot(rnorm(100), col = "tomato", main = "Boxplot")
+    } else if (input$plotType == "scatter") {
+      plot(rnorm(100), rnorm(100), col = "blue", pch = 19, main = "Scatterplot")
+    }
+  })
+}
+
+shinyApp(ui, server)
+
+
+
+# plot_module.R
+plotUI <- function(id) {
+  ns <- NS(id)
+  tagList(
+    selectInput(ns("plotType"), "Choose a plot:",
+                choices = c("Histogram" = "hist",
+                            "Boxplot" = "boxplot",
+                            "Scatterplot" = "scatter")),
+    plotOutput(ns("plot"))
+  )
+}
+
+plotServer <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    output$plot <- renderPlot({
+      req(input$plotType)
+      if (input$plotType == "hist") {
+        hist(rnorm(100), col = "skyblue", main = "Histogram")
+      } else if (input$plotType == "boxplot") {
+        boxplot(rnorm(100), col = "tomato", main = "Boxplot")
+      } else if (input$plotType == "scatter") {
+        plot(rnorm(100), rnorm(100), col = "blue", pch = 19, main = "Scatterplot")
+      }
+    })
+  })
+}
+
+library(shiny)
+library(bslib)
+
+# Source the module file
+source("plot_module.R")
+
+ui <- fluidPage(
+  tabsetPanel(
+    tabPanel("Plots", 
+      layout_sidebar(
+        sidebar = sidebar(
+          plotUI("plot1")
+        ),
+        mainPanel = mainPanel(
+          plotOutput("plot1-plot")
+        )
+      )
+    )
+  )
+)
+
+server <- function(input, output, session) {
+  plotServer("plot1")
+}
+
+shinyApp(ui, server)
+
+
+
+
+
+# modules/mod_plot.R
+
+mod_plot_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    actionButton(ns("hist"), "Histogram", class = "mb-2"),
+    actionButton(ns("boxplot"), "Boxplot", class = "mb-2"),
+    actionButton(ns("scatter"), "Scatterplot", class = "mb-2")
+  )
+}
+
+mod_plot_server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    selected_plot <- reactiveVal("hist")
+    observe()
+    observeEvent(input$hist, selected_plot("hist"))
+    observeEvent(input$boxplot, selected_plot("boxplot"))
+    observeEvent(input$scatter, selected_plot("scatter"))
+
+    output$plot <- renderPlot({
+      switch(selected_plot(),
+             hist = hist(rnorm(100), col = "skyblue", main = "Histogram"),
+             boxplot = boxplot(rnorm(100), col = "tomato", main = "Boxplot"),
+             scatter = plot(rnorm(100), rnorm(100), col = "blue", pch = 19, main = "Scatterplot")
+      )
+    })
+  })
+}
+
+
+library(shiny)
+library(bslib)
+
+ui <- page_sidebar(
+  title = "FLR Plot Viewer",
+  sidebar = mod_plot_ui("plot_module"),
+  theme = bs_theme(bootswatch = "minty"),
+  main = plotOutput(NS("plot_module", "plot"))  # Ensure this matches the namespaced output
+)
+
+server <- function(input, output, session) {
+  mod_plot_server("plot_module")
+}
+
+shinyApp(ui, server)
+
+
+
+
+##################################
+
+mod_select_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+    actionButton(ns("hist"), "Histogram", class = "mb-2"),
+    actionButton(ns("boxplot"), "Boxplot", class = "mb-2"),
+    actionButton(ns("scatter"), "Scatterplot", class = "mb-2")
+  )
+}
+
+mod_select_server <- function(id, selected_plot) {
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    observeEvent(input$hist, {
+      selected_plot("hist")
+      print("Histogram selected")  # Debugging message
+    })
+    observeEvent(input$boxplot, {
+      selected_plot("boxplot")
+      print("Boxplot selected")  # Debugging message
+    })
+    observeEvent(input$scatter, {
+      selected_plot("scatter")
+      print("Scatterplot selected")  # Debugging message
+    })
+  })
+}
+
+mod_plot_ui <- function(id) {
+  ns <- NS(id)
+  tagList(
+  plotOutput(ns("plot"))
+  )
+}
+
+mod_plot_server <- function(id, selected_plot) {
+  moduleServer(id, function(input, output, session) {
+    output$plot <- renderPlot({
+      plot_type <- selected_plot()
+      if (plot_type == "hist") {
+        hist(rnorm(100), col = "skyblue", main = "Histogram")
+      } else if (plot_type == "boxplot") {
+        boxplot(rnorm(100), col = "tomato", main = "Boxplot")
+      } else if (plot_type == "scatter") {
+        plot(rnorm(100), rnorm(100), col = "blue", pch = 19, main = "Scatterplot")
+      }
+    })
+  })
+}
+
+library(shiny)
+library(bslib)
+
+ui <- page_sidebar(
+  title = "FLR Plot Viewer",
+  sidebar = mod_select_ui("select_module"),
+  theme = bs_theme(bootswatch = "minty"),
+  main = mod_plot_ui("plot_module")
+)
+
+server <- function(input, output, session) {
+  selected_plot <- reactiveVal("hist")  # Initialize with "hist" to show the plot at the beginning
+  
+  mod_select_server("select_module", selected_plot)
+  mod_plot_server("plot_module", selected_plot)
+}
+
+shinyApp(ui, server)
+
+
+
+
+###################
+# Module UI for selecting which plot to display
+plotSelectorUI <- function(id) {
+  ns <- NS(id)
+  tagList(
+    actionButton(ns("plot1"), "Show Plot 1"),
+    actionButton(ns("plot2"), "Show Plot 2"),
+    actionButton(ns("plot3"), "Show Plot 3")
+  )
+}
+
+# Server logic: returns a reactive indicating the selected plot
+plotSelectorServer <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    selected_plot <- reactiveVal(NULL)
+
+    observeEvent(input$plot1, {
+      selected_plot("plot1")
+    })
+
+    observeEvent(input$plot2, {
+      selected_plot("plot2")
+    })
+
+    observeEvent(input$plot3, {
+      selected_plot("plot3")
+    })
+
+    return(selected_plot)
+})
+}
+# Module UI for displaying the plot
+plotDisplayUI <- function(id) {
+  ns <- NS(id)
+  plotOutput(ns("plot"))
+}
+
+# Server logic: takes a reactive plot name and renders it
+plotDisplayServer <- function(id, plot_name) {
+  moduleServer(id, function(input, output, session) {
+    output$plot <- renderPlot({
+      req(plot_name())
+      switch(plot_name(),
+             "plot1" = plot(cars, main = "Plot 1: Cars"),
+             "plot2" = hist(iris$Sepal.Length, main = "Plot 2: Iris Sepal Length"),
+             "plot3" = boxplot(mpg ~ cyl, data = mtcars, main = "Plot 3: MPG by Cylinder")
+    )
+})
+})
+}
+
+library(shiny)
+library(bslib)
+
+# Source modules
+# source("modules/plot_selector_module.R")
+# source("modules/plot_display_module.R")
+
+ui <- fluidPage(
+  theme = bs_theme(bootswatch = "flatly"),
+  titlePanel("Modular Shiny App with Plot Selector"),
+  sidebarLayout(
+    sidebarPanel(
+      plotSelectorUI("plot_selector")
+    ),
+    mainPanel(
+      plotDisplayUI("plot_display")
+    )
+  )
+)
+
+server <- function(input, output, session) {
+  selected_plot <- plotSelectorServer("plot_selector")
+  plotDisplayServer("plot_display", selected_plot)
+}
+
+shinyApp(ui,server)
+
+
+database icon
+<i class="fa-solid fa-database"></i>
+model
+<i class="fa-solid fa-chart-diagram"></i>
+output
+<i class="fa-solid fa-chart-line"></i>
+report
+<i class="fa-solid fa-file-contract"></i>
+
+
+
+library(reactable)
+library(htmltools)
+library(dplyr)
+library(jsonlite)
+
+# Your data (converted from JSON)
+json_data <- '
+[
+  {
+    "id": 1,
+    "stockCode": "nep.fu.2829",
+    "year": 2024,
+    "ecoregion": "Greater North Sea",
+    "expertGroup": "WGNSSK",
+    "CommonName": "Norway lobster",
+    "dataCategory": "1",
+    "gitHubUrl": "https://github.com/ices-taf/2017_nep.fu.2829",
+    "assessmentKey": 12003,
+    "AssessmentType": "SAM",
+    "DataFiles": 1,
+    "ModelFiles": 1,
+    "OutputFiles": 1,
+    "ReportFiles": 1,
+    "SuccessfulRun": "TRUE"
+  },
+  {
+    "id": 1,
+    "stockCode": "rjc.27.3a47d",
+    "year": 2024,
+    "ecoregion": "Baltic Sea",
+    "expertGroup": "WGNSSK",
+    "CommonName": "Norway lobster",
+    "dataCategory": "3.2",
+    "gitHubUrl": "https://github.com/ices-taf/2017_rjc.27.3a47d",
+    "assessmentKey": 18023,
+    "AssessmentType": "SAM",
+    "DataFiles": 1,
+    "ModelFiles": 2,
+    "OutputFiles": 3,
+    "ReportFiles": 3,
+    "SuccessfulRun": "FALSE"
+  }
+]
+'
+
+data <- jsonlite::fromJSON(json_data)
+
+# Add diagnostics column
+data <- data %>%
+  mutate(
+    diagnostics = mapply(function(df, mf, of, rf, sr) {
+      paste(
+        paste0(rep('<i class="fa-solid fa-database" title="Data file"></i>', df), collapse = " "),
+        paste0(rep('<i class="fa-solid fa-chart-diagram" title="Model file"></i>', mf), collapse = " "),
+        paste0(rep('<i class="fa-solid fa-chart-line" title="Output file"></i>', of), collapse = " "),
+        paste0(rep('<i class="fa-solid fa-file-contract" title="Report file"></i>', rf), collapse = " "),
+        if (sr == "TRUE") {
+          '<i class="fa-solid fa-circle-check" style="color:green" title="Run successful"></i>'
+        } else {
+          '<i class="fa-solid fa-circle-xmark" style="color:red" title="Run failed"></i>'
+        },
+        sep = " "
+      )
+    }, DataFiles, ModelFiles, OutputFiles, ReportFiles, SuccessfulRun)
+  )
+
+# Build the reactable
+reactable(
+  data,
+  columns = list(
+    Diagnostics = colDef(
+      name = "Diagnostics",
+      cell = function(value) HTML(value),
+      html = TRUE
+    )
+  ),
+  defaultPageSize = 2,
+  bordered = TRUE,
+  highlight = TRUE
+)
+
+
+
+library(reactable)
+library(dplyr)
+library(jsonlite)
+
+# Original data in JSON
+json_data <- '
+[
+  {
+    "id": 1,
+    "stockCode": "nep.fu.2829",
+    "year": 2024,
+    "ecoregion": "Greater North Sea",
+    "expertGroup": "WGNSSK",
+    "CommonName": "Norway lobster",
+    "dataCategory": "1",
+    "gitHubUrl": "https://github.com/ices-taf/2017_nep.fu.2829",
+    "assessmentKey": 12003,
+    "AssessmentType": "SAM",
+    "DataFiles": 1,
+    "ModelFiles": 1,
+    "OutputFiles": 1,
+    "ReportFiles": 1,
+    "SuccessfulRun": "TRUE"
+  },
+  {
+    "id": 1,
+    "stockCode": "rjc.27.3a47d",
+    "year": 2024,
+    "ecoregion": "Baltic Sea",
+    "expertGroup": "WGNSSK",
+    "CommonName": "Norway lobster",
+    "dataCategory": "3.2",
+    "gitHubUrl": "https://github.com/ices-taf/2017_rjc.27.3a47d",
+    "assessmentKey": 18023,
+    "AssessmentType": "SAM",
+    "DataFiles": 1,
+    "ModelFiles": 2,
+    "OutputFiles": 3,
+    "ReportFiles": 3,
+    "SuccessfulRun": "FALSE"
+  }
+]
+'
+
+# Convert to dataframe
+data <- jsonlite::fromJSON(json_data)
+
+# Add diagnostics column using emojis
+data <- data %>%
+  mutate(
+    diagnostics = mapply(function(df, mf, of, rf, sr) {
+      paste0(
+        strrep("🗃️", df), " ",
+        strrep("📊", mf), " ",
+        strrep("📈", of), " ",
+        strrep("📄", rf), " ",
+        if (sr == "TRUE") "✅" else "❌"
+      )
+    }, DataFiles, ModelFiles, OutputFiles, ReportFiles, SuccessfulRun)
+  )
+
+# Create the reactable
+reactable(
+  data,
+  columns = list(
+    diagnostics = colDef(name = "Diagnostics")
+  ),
+  defaultPageSize = 2,
+  bordered = TRUE,
+  highlight = TRUE
+)
